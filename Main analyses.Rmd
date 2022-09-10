@@ -1,0 +1,1866 @@
+---
+title: "Imitating the Robots: Measuring Memory Flexibility with Monolingual and Bilingual Preschoolers"
+subtitle: "Main Analyses"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 6
+  html_document:
+    toc: yes
+    toc_depth: '6'
+    df_print: paged
+---
+\newpage
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE, tidy.opts = list(width.cutoff = 80), tidy = TRUE, fig.align = "left",
+  message = FALSE, warning = FALSE, echo = FALSE
+)
+```
+
+## Libraries
+
+```{r }
+library(papaja)
+library(tidyverse)
+library(psych)
+library(kableExtra)
+library(car)
+library(cowplot)
+source("R_rainclouds.R")
+library(jtools)
+library(rstatix)
+library(visreg)
+library(lmerTest)
+# library(ggstatsplot)
+library(wesanderson)
+library(modelsummary)
+library(corrplot)
+library(ggpubr)
+library(EMAtools)
+
+
+# library(conflicted)
+filter <- dplyr::filter
+theme_apa <- papaja::theme_apa
+select <- dplyr::select
+
+
+datetoday <- Sys.Date()
+"%notin%" <- Negate("%in%")
+
+library(sessioninfo)
+session_info(pkgs = "!attached", to_file = "session-info-logs/main_analyses")
+```
+
+## Loading datasets
+
+```{r}
+data0 <- read_csv("data/robots_scores_2022-03-07.csv")
+
+demo <- read_csv("data/demo.csv")
+LPA_vars <- read_csv("data/LPA_vars_summary_dataset_2022-03-14.csv")
+drop_list <- read_csv("data/drops.csv")
+pvt_scores <- read_csv("data/pvt.csv")
+plan1_lpa <- read_csv("data/LPA_four_poses_dataset_2022-03-14.csv")
+plan2_lpa <- read_csv("data/allvalid_poses_dataset_2022-03-14.csv")
+```
+
+
+## Data Cleaning and Dropping Children or/and Poses
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+data0 <- data0 %>%
+  select(-c("gender", "...1")) %>%
+  dplyr::filter(age == "36")
+
+
+demo <- demo %>%
+  dplyr::filter(str_detect(code_new, "leat") == FALSE)
+
+demo_age <- demo %>%
+  dplyr::select(codenumber, age_mo)
+
+data0 <- drop_list %>%
+  select(codenumber, task_not_performed:C5) %>%
+  dplyr::mutate(CB2 = CB, CB3 = CB, CB4 = CB, CB5 = CB) %>%
+  select(-c(CB, reason)) %>%
+  pivot_longer(cols = C2:CB5, names_to = "pose", values_to = "pose_drop") %>%
+  right_join(data0, by = c("codenumber", "pose"))
+
+
+data <- left_join(data0, demo, by = "codenumber")
+data <- left_join(data, LPA_vars, by = "codenumber")
+
+
+data <- data %>%
+  dplyr::mutate(
+    drop = case_when(
+      is.na(l1_overall) == TRUE ~ 1,
+      age_mo < 35 | age_mo >= 49 ~ 1,
+      TRUE ~ drop
+    ),
+    pose_drop = case_when(
+      TRUE ~ pose_drop
+    ),
+    bilingual = case_when(
+      l2_overall >= 0.20 ~ 1,
+      TRUE ~ 0
+    ),
+    condition = case_when(
+      pose %in% c("C2", "C3", "C4", "C5") ~ "test",
+      TRUE ~ "baseline"
+    ),
+    gender_dummy = case_when(
+      gender == "Female" ~ 1,
+      gender == "Male" ~ 0
+    ),
+    l1_overall = l1_overall * 100,
+    l2_overall = l2_overall * 100,
+    l3_overall = l3_overall * 100,
+  ) %>%
+  rowwise() %>%
+  dplyr::mutate(edu_avg = mean(c(p1_edu_yr, p2_edu_yr), na.rm = TRUE))
+
+# filtering out my drops
+data2 <- data %>%
+  dplyr::filter(drop != 1, pose_drop != 1)
+```
+
+
+```{r}
+# Calculating the number of kids who made it through all 4 poses during test
+tested_all_poses <- data2 %>%
+  select(codenumber, pose, condition) %>%
+  dplyr::filter(!str_detect(pose, "B")) %>%
+  group_by(codenumber) %>%
+  count(name = "n_tests") %>%
+  dplyr::mutate(tested_all_poses = case_when(
+    n_tests == 4 ~ 1,
+    TRUE ~ 0
+  ))
+
+baseline_all_poses <- data2 %>%
+  select(codenumber, pose, condition) %>%
+  dplyr::filter(str_detect(pose, "B")) %>%
+  group_by(codenumber) %>%
+  count(name = "n_base") %>%
+  dplyr::mutate(base_all_poses = case_when(
+    n_base == 4 ~ 1,
+    TRUE ~ 0
+  ))
+
+data2 <- full_join(data2, tested_all_poses, by = "codenumber")
+data2 <- full_join(data2, baseline_all_poses, by = "codenumber")
+```
+
+## Analyses Plans
+
+### #1: Only children who had 4 valid poses during test [aka Approach 1]
+
+In this analysis I only include children who have had 4 valid test trials. Two DVs are analyzed using this filter:
+- score_1 = totalsteps + totalpairs
+
+```{r}
+## Creating the dataset for this parameters
+plan1 <- data2 %>%
+  dplyr::mutate(
+    score_1 = totalsteps + totalpairs,
+  ) %>%
+  dplyr::filter(tested_all_poses == 1 & base_all_poses == 1) %>%
+  dplyr::group_by(codenumber, condition, gender_dummy, gender, bilingual, l1, l1_overall, l2_overall, l3_overall, edu_avg, income, age_mo) %>%
+  dplyr::summarise(
+    total_comp_score_1 = sum(score_1),
+  ) %>%
+  dplyr::mutate(
+    total_comp_ratio_score_1 = round(total_comp_score_1 / 24, 2) * 100,
+  ) %>%
+  ungroup()
+
+plan1_b <- data2 %>%
+  dplyr::mutate(
+    score_1 = totalsteps + totalpairs,
+  ) %>%
+  dplyr::filter(tested_all_poses == 1 & base_all_poses == 1) %>%
+  dplyr::mutate(
+    total_comp_ratio_score_1 = round(score_1 / 24, 2) * 100,
+  ) %>%
+  group_by(bilingual, condition, pose) %>%
+  summarise(
+    mean_1 = mean(score_1),
+  )
+
+
+
+four_poses_uniq_codes <- plan1 %>%
+  distinct(codenumber)
+
+
+
+# write.csv(four_poses_uniq_codes, file = paste0("data/four_poses_uniq_codes","_",datetoday,".csv"),row.names=FALSE)
+```
+
+
+#### Score 1 Descriptives
+```{r}
+score_1_descriptives <- print(describeBy(plan1[c("total_comp_score_1", "total_comp_ratio_score_1")], list(plan1$bilingual, plan1$condition), skew = FALSE, mat = TRUE), digits = 2)
+```
+```{r}
+score_1_descriptives_condition <- print(describeBy(plan1[c("total_comp_score_1", "total_comp_ratio_score_1")], list(plan1$condition), skew = TRUE, mat = TRUE), digits = 2)
+```
+
+
+#### Demographics
+```{r}
+plan1 <- left_join(plan1, pvt_scores)
+
+demo_plan1 <- plan1 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  select(codenumber:income, age_mo, pvt_perc) %>%
+  select(-c(condition)) %>%
+  dplyr::mutate(
+    edu_avg = case_when(
+      is.na(edu_avg) == TRUE ~ mean(edu_avg, na.rm = TRUE),
+      TRUE ~ edu_avg
+    ),
+    age_mo = as.numeric(age_mo)
+  )
+
+
+
+means_income_edu_age_plan1 <- demo_plan1 %>%
+  summarise(
+    mean_income = mean(income),
+    mean_edu = mean(edu_avg, na.rm = TRUE),
+    mean_age = mean(age_mo, na.rm = TRUE)
+  )
+
+mean_income_plan1 <- as.numeric(means_income_edu_age_plan1[1, 1])
+mean_edu_plan1 <- as.numeric(means_income_edu_age_plan1[1, 2])
+mean_age_plan1 <- as.numeric(means_income_edu_age_plan1[1, 3])
+
+demo_plan1 <- demo_plan1 %>%
+  mutate(
+    income_c = round(income - mean_income_plan1, 2),
+    edu_c = round(edu_avg - mean_edu_plan1, 2),
+    age_c = round(age_mo - mean_age_plan1, 2)
+  )
+
+centered_for_plan1 <- demo_plan1 %>%
+  dplyr::select(codenumber, income_c, edu_c, age_c)
+
+demo_div <- print(describeBy(demo_plan1[c("edu_avg", "income", "l1_overall", "l2_overall", "l3_overall")], demo_plan1$bilingual, skew = FALSE), digits = 2)
+
+
+demo_mono <- print(demo_div[["0"]], digits = 2)
+demo_bi <- print(demo_div[["1"]], digits = 2)
+
+
+gender <- demo_plan1 %>%
+  group_by(bilingual, gender) %>%
+  count()
+
+lang_n <- demo_plan1 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  group_by(bilingual) %>%
+  count()
+
+dom_language_plan1 <- plan1 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  group_by(l1) %>%
+  count()
+
+plan1 %>%
+  group_by(condition, bilingual) %>%
+  summarise(
+    mean_score = round(mean(total_comp_ratio_score_1), 2),
+    sd_score = round(sd(total_comp_ratio_score_1), 2),
+    min_score = round(min(total_comp_ratio_score_1), 2),
+    max_score = round(max(total_comp_ratio_score_1), 2)
+  )
+```
+
+#### Correlation Maps
+```{r}
+corr_dataset <- plan1 %>%
+  dplyr::filter(condition == "test") %>%
+  dplyr::mutate(age_mo = as.numeric(age_mo)) %>%
+  dplyr::select(l1_overall, l2_overall, l3_overall, edu_avg, income, total_comp_score_1, total_comp_ratio_score_1, age_mo, pvt_perc) %>%
+  dplyr::mutate(edu_avg = case_when(
+    is.na(edu_avg) == TRUE ~ mean(edu_avg, na.rm = TRUE),
+    TRUE ~ edu_avg
+  ))
+
+
+M <- cor(corr_dataset, use = "complete.obs")
+
+cor.mtest <- function(mat, ...) {
+  mat <- as.matrix(mat)
+  n <- ncol(mat)
+  p.mat <- matrix(NA, n, n)
+  diag(p.mat) <- 0
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      tmp <- cor.test(mat[, i], mat[, j], ...)
+      p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+    }
+  }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+# matrix of the p-value of the correlation
+p.mat <- cor.mtest(corr_dataset)
+```
+
+#### t-tests for demo
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+demo_stats <- demo_plan1 %>%
+  dplyr::select(c("bilingual", "l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc")) %>%
+  pivot_longer(c("l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc"), names_to = "variable", values_to = "values") %>%
+  group_by(variable) %>%
+  t_test(values ~ bilingual) %>%
+  add_significance() %>%
+  dplyr::select(variable, p, p.signif) %>%
+  ungroup()
+
+
+demo <- demo_plan1 %>%
+  dplyr::select(c("bilingual", "l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc")) %>%
+  group_by(bilingual) %>%
+  dplyr::summarise(across(c(1:8), (list(
+    mean = ~ round(mean(.x, na.rm = TRUE), 2),
+    sd = ~ round(sd(.x, na.rm = TRUE), 2),
+    min = ~ min(.x, na.rm = TRUE),
+    max = ~ max(.x, na.rm = TRUE)
+  )),
+  .names = "{col}-{fn}"
+  )) %>%
+  gather(key, value, -bilingual) %>%
+  separate(key, into = c("variable", "stat"), sep = "-") %>%
+  dplyr::mutate(stat = paste0(stat, bilingual)) %>%
+  dplyr::select(-bilingual) %>%
+  spread(stat, value) %>%
+  relocate(c(mean0, sd0, min0, max0), .after = variable) %>%
+  relocate(c(mean1, sd1, min1, max1), .after = max0) %>%
+  full_join(demo_stats)
+
+demo_overall <- demo_plan1 %>%
+  dplyr::select(c("bilingual", "l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc")) %>%
+  dplyr::summarise(across(c(1:8), (list(
+    mean = ~ round(mean(.x, na.rm = TRUE), 2),
+    sd = ~ round(sd(.x, na.rm = TRUE), 2),
+    min = ~ min(.x, na.rm = TRUE),
+    max = ~ max(.x, na.rm = TRUE)
+  )),
+  .names = "{col}-{fn}"
+  ))
+```
+
+#### Models
+
+##### Correlations for Baseline
+```{r}
+plan1_pearson_pvt_score <- plan1 %>%
+  dplyr::filter(condition != "test")
+
+ggscatter(plan1_pearson_pvt_score,
+  x = "pvt_perc", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson", cor.df = TRUE,
+  xlab = "PVT Percentile Scores", ylab = "Total Composite Ratio Score"
+)
+ggsave("figures/corrs/corr_score1_pvt_plan1_baseline.png", width = 6, height = 6)
+
+
+cor.test(plan1_pearson_pvt_score$pvt_perc, plan1_pearson_pvt_score$total_comp_ratio_score_1, method = "pearson")
+```
+##### Correlations for Test
+```{r}
+plan1_pearson_pvt_score <- plan1 %>%
+  dplyr::filter(condition == "test")
+
+ggscatter(plan1_pearson_pvt_score,
+  x = "pvt_perc", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson",
+  xlab = "PVT Percentile Scores", ylab = "Total Composite Ratio Score"
+)
+ggsave("figures/corrs/corr_score1_pvt_plan1_test.png", width = 6, height = 6)
+
+cor.test(plan1_pearson_pvt_score$pvt_perc, plan1_pearson_pvt_score$total_comp_ratio_score_1, method = "pearson")
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan1 <- right_join(plan1, centered_for_plan1, by = "codenumber")
+
+
+plan1_test_only <- plan1 %>%
+  dplyr::filter(condition != "baseline")
+
+plan1$bilingual <- recode_factor(plan1$bilingual, `1` = "Bilingual", `0` = "Monolingual")
+
+plan1$condition <- recode_factor(plan1$condition, "baseline" = "Baseline", "test" = "Test")
+```
+
+#### T-Test for baseline vs test
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan1 %>%
+  t_test(total_comp_ratio_score_1 ~ condition, paired = TRUE) %>%
+  add_significance()
+
+describe.by(plan1, "condition")
+```
+
+#### Score 1-Binary
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + edu_c + income_c + age_c + pvt_perc, data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + edu_c + income_c + age_c, data = ., REML = F)
+
+rc_3_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + edu_c + age_c, data = ., REML = F)
+
+
+rc_4_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + income_c + age_c, data = ., REML = F)
+
+rc_5_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + age_c, data = ., REML = F)
+
+# winner
+rc_6_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + age_c + pvt_perc, data = ., REML = F)
+
+rc_7_test_only <- plan1 %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ bilingual + l3_overall + age_c, data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only, rc_7_test_only)
+
+
+summary(rc_6_test_only)
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_6_test_only)
+```
+
+##### Table Summary
+
+```{r}
+modelsummary_plan1_binnary_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_6_test_only
+)
+
+
+msummary(modelsummary_plan1_binnary_test_only,
+  output = "Tables/modelsummary_plan1_binnary_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan1$bilingual <- factor(plan1$bilingual, levels = c("Monolingual", "Bilingual"))
+
+plan1 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = bilingual, y = total_comp_ratio_score_1, fill = bilingual, col = bilingual)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  geom_boxplot(aes(x = as.numeric(bilingual) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32)) +
+  geom_hline(yintercept = 1.41, linetype = "dashed", color = "black")
+ggsave("figures/test_only/binary_approach1.png", width = 15, height = 10)
+```
+
+##### T-Test PVT
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan1 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  t_test(pvt_perc ~ bilingual, paired = FALSE) %>%
+  add_significance()
+```
+#### Score 1-LPA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+plan1_plus_lpa <- left_join(plan1, plan1_lpa, by = "codenumber")
+plan1_plus_lpa$profiles <- as.factor(plan1_plus_lpa$profiles)
+plan1_plus_lpa$profiles <- recode_factor(plan1_plus_lpa$profiles, `1` = "Medium", `2` = "Low", `3` = "High")
+
+plan1_plus_lpa$profiles <- factor(plan1_plus_lpa$profiles, levels = c("Low", "Medium", "High"))
+```
+
+##### Models
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + edu_c + income_c + age_c + pvt_perc, data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + edu_c + income_c + age_c, data = ., REML = F)
+
+rc_3_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + edu_c + age_c, data = ., REML = F)
+
+rc_4_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + income_c + age_c, data = ., REML = F)
+
+rc_5_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + age_c, data = ., REML = F)
+
+##Winner!!
+rc_6_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + age_c + pvt_perc, data = ., REML = F)
+
+rc_7_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ profiles + l3_overall + age_c, data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only, rc_7_test_only)
+
+
+summary(rc_1_test_only)
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_6_test_only)
+```
+
+##### Table Summary
+
+```{r}
+modelsummary_plan1_lpa_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_6_test_only
+)
+
+
+msummary(modelsummary_plan1_lpa_test_only,
+  output = "Tables/modelsummary_plan1_lpa_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = profiles, y = total_comp_ratio_score_1, fill = profiles, col = profiles)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .1), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  geom_boxplot(aes(x = as.numeric(profiles) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Multilingual Exposure") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32)) +
+  geom_hline(yintercept = 1.41, linetype = "dashed", color = "black")
+
+ggsave("figures/test_only/lpa_approach1.png", width = 15, height = 10)
+```
+
+##### Correlations & Anova
+```{r}
+plan1_plus_lpa_for_anova <- plan1_plus_lpa %>% distinct(codenumber, .keep_all = TRUE)
+describeBy(plan1_plus_lpa_for_anova, plan1_plus_lpa_for_anova$profiles)
+
+
+one.way <- aov(pvt_perc ~ profiles, data = plan1_plus_lpa_for_anova)
+
+summary(one.way)
+
+cor.test(plan1_plus_lpa_for_anova$pvt_perc, plan1_plus_lpa_for_anova$l2_overall, method = "pearson")
+```
+
+#### Score 1-Continuous
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + edu_c + income_c + age_c + pvt_perc, data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + edu_c + income_c + age_c, data = ., REML = F)
+
+rc_3_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + edu_c + age_c, data = ., REML = F)
+
+rc_4_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + income_c + age_c, data = ., REML = F)
+
+rc_5_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + age_c, data = ., REML = F)
+
+## Winner!!!
+rc_6_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + age_c + pvt_perc, data = ., REML = F)
+
+rc_7_test_only <- plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lm(total_comp_ratio_score_1 ~ l2_overall + l3_overall + age_c, data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only, rc_7_test_only)
+
+
+summary(rc_1_test_only)
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_6_test_only)
+```
+
+##### Table Summary
+
+```{r}
+modelsummary_plan1_continuous_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_6_test_only
+)
+
+
+msummary(modelsummary_plan1_continuous_test_only,
+  output = "Tables/modelsummary_plan1_continuous_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r fig.align = 'left'}
+plan1_plus_lpa %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = l2_overall, y = total_comp_ratio_score_1)) +
+  geom_point(psize = 1, alpha = 0.4, size = 4) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, size = 1.1) +
+  scale_fill_brewer(palette = "Darjeeling1") +
+  scale_colour_brewer(palette = "Darjeeling1") +
+  ylab("Composite Score") +
+  xlab("L2 Exposure") +
+  theme_apa() +
+  scale_y_continuous(breaks = seq(0, 100, 10)) +
+  geom_vline(
+    xintercept = 20, linetype = "dotted",
+    color = "brown"
+  ) +
+  theme(text = element_text(size = 20)) +
+  geom_hline(yintercept = 1.41, linetype = "dashed", color = "black")
+ggsave("figures/test_only/L2_perc_approach1.png", width = 10, height = 6)
+```
+
+##### Corr PVT & L2
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+cor.test(plan1_test_only$pvt_perc, plan1_test_only$l2_overall, method = "pearson")
+```
+
+### #2: All children who had valid poses [aka Approach 2]
+
+In this analysis I include all children with all their valid trials.
+- score_1 = totalsteps + totalpairs
+
+```{r}
+## Creating the dataset for this parameters
+numextract <- function(string) {
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+}
+
+
+plan2 <- data2 %>%
+  dplyr::mutate(
+    score_1 = totalsteps + totalpairs,
+    max_score_1 = case_when(
+      str_detect(pose, "2") == TRUE ~ 3,
+      str_detect(pose, "3") == TRUE ~ 5,
+      str_detect(pose, "4") == TRUE ~ 7,
+      str_detect(pose, "5") == TRUE ~ 9
+    )) %>%
+  dplyr::group_by(codenumber, pose, condition, gender_dummy, gender, bilingual, l1, l1_overall, l2_overall, l3_overall, edu_avg, income, max_score_1, age_mo, race, latinx) %>%
+  dplyr::summarise(
+    total_comp_score_1 = sum(score_1),
+  ) %>%
+  dplyr::mutate(
+    total_comp_ratio_score_1 = round(total_comp_score_1 / max_score_1, 2) * 100,
+    age_mo = as.numeric(age_mo)
+  ) %>%
+  ungroup()
+
+plan2$trial_num <- as.numeric(numextract(plan2$pose)) - 1
+
+
+all_poses_uniq_codes <- plan2 %>%
+  distinct(codenumber)
+
+plan2 <- left_join(plan2, pvt_scores)
+
+# write.csv(all_poses_uniq_codes, file = paste0("data/all_poses_uniq_codes","_",datetoday,".csv"),row.names=FALSE)
+```
+
+
+#### Centering education and income
+
+#### Score 1 Descriptives
+```{r}
+score_1_descriptives <- print(describeBy(plan2[c("total_comp_score_1", "total_comp_ratio_score_1")], list(plan2$bilingual, plan2$condition), skew = TRUE, mat = TRUE), digits = 2)
+```
+```{r}
+score_1_descriptives_condition <- print(describeBy(plan2[c("total_comp_score_1", "total_comp_ratio_score_1")], list(plan2$condition), skew = TRUE, mat = TRUE), digits = 2)
+```
+
+
+#### Demographics
+```{r}
+plan2_count <- plan2 %>%
+  group_by(codenumber, condition) %>%
+  count()
+
+
+demo_plan2 <- plan2 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  select(codenumber:income, age_mo, race, latinx, pvt_perc) %>%
+  select(-c(pose, condition)) %>%
+  dplyr::mutate(edu_avg = case_when(
+    is.na(edu_avg) == TRUE ~ mean(edu_avg, na.rm = TRUE),
+    TRUE ~ edu_avg
+  ))
+
+demo_plan2 %>%
+  group_by(race) %>%
+  count()
+demo_plan2 %>%
+  group_by(latinx) %>%
+  count()
+
+means_income_edu_age_plan2 <- demo_plan2 %>%
+  summarise(
+    mean_income = mean(income),
+    mean_edu = mean(edu_avg, na.rm = TRUE),
+    mean_age = mean(age_mo, na.rm = TRUE)
+  )
+
+mean_income_plan2 <- as.numeric(means_income_edu_age_plan2[1, 1])
+mean_edu_plan2 <- as.numeric(means_income_edu_age_plan2[1, 2])
+mean_age_plan2 <- as.numeric(means_income_edu_age_plan2[1, 3])
+
+demo_plan2 <- demo_plan2 %>%
+  mutate(
+    income_c = round(income - mean_income_plan2, 2),
+    edu_c = round(edu_avg - mean_edu_plan2, 2),
+    age_c = round(age_mo - mean_age_plan2, 2)
+  )
+
+centered_for_plan2 <- demo_plan2 %>%
+  dplyr::select(codenumber, income_c, edu_c, age_c)
+
+
+demo_div <- print(describeBy(demo_plan2[c("edu_avg", "income", "l1_overall", "l2_overall", "l3_overall", "age_mo", "pvt_perc")], demo_plan2$bilingual, skew = FALSE), digits = 2)
+
+demo_mono <- print(demo_div[["0"]], digits = 2)
+demo_bi <- print(demo_div[["1"]], digits = 2)
+
+
+gender <- demo_plan2 %>%
+  group_by(bilingual, gender) %>%
+  count()
+
+lang_n <- demo_plan2 %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  group_by(bilingual) %>%
+  count()
+```
+
+#### Correlation Maps
+```{r}
+
+corr_dataset <- plan2 %>%
+  dplyr::filter(condition == "test") %>%
+  dplyr::select(l1_overall, l2_overall, l3_overall, edu_avg, income, total_comp_score_1, total_comp_ratio_score_1, age_mo, pvt_perc)
+
+
+M <- cor(corr_dataset)
+
+cor.mtest <- function(mat, ...) {
+  mat <- as.matrix(mat)
+  n <- ncol(mat)
+  p.mat <- matrix(NA, n, n)
+  diag(p.mat) <- 0
+  for (i in 1:(n - 1)) {
+    for (j in (i + 1):n) {
+      tmp <- cor.test(mat[, i], mat[, j], ...)
+      p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+    }
+  }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+# matrix of the p-value of the correlation
+p.mat <- cor.mtest(corr_dataset)
+
+p.mat
+```
+
+#### t-tests for demo
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+demo_stats <- demo_plan2 %>%
+  dplyr::select(c("bilingual", "l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc")) %>%
+  pivot_longer(c("l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc"), names_to = "variable", values_to = "values") %>%
+  group_by(variable) %>%
+  t_test(values ~ bilingual) %>%
+  add_significance() %>%
+  dplyr::select(variable, statistic, df, p, p.signif) %>%
+  ungroup()
+
+
+demo <- demo_plan2 %>%
+  dplyr::select(c("bilingual", "l1_overall", "l2_overall", "l3_overall", "edu_avg", "gender_dummy", "income", "age_mo", "pvt_perc")) %>%
+  group_by(bilingual) %>%
+  dplyr::summarise(across(c(1:8), (list(
+    mean = ~ round(mean(.x, na.rm = TRUE), 2),
+    sd = ~ round(sd(.x, na.rm = TRUE), 2),
+    min = ~ min(.x, na.rm = TRUE),
+    max = ~ max(.x, na.rm = TRUE)
+  )),
+  .names = "{col}-{fn}"
+  )) %>%
+  gather(key, value, -bilingual) %>%
+  separate(key, into = c("variable", "stat"), sep = "-") %>%
+  dplyr::mutate(stat = paste0(stat, bilingual)) %>%
+  dplyr::select(-bilingual) %>%
+  spread(stat, value) %>%
+  relocate(c(mean0, sd0, min0, max0), .after = variable) %>%
+  relocate(c(mean1, sd1, min1, max1), .after = max0) %>%
+  full_join(demo_stats)
+
+demo_stats
+```
+
+##### Correlations for Baseline
+```{r}
+plan2_pearson_pvt_score_baseline <- plan2 %>%
+  dplyr::filter(condition != "Test")
+
+ggscatter(plan2_pearson_pvt_score_baseline,
+  x = "pvt_perc", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson",
+  xlab = "PVT Percentile Scores", ylab = "Total Composite Ratio Score"
+)
+ggsave("figures/corrs/corr_score1_pvt_plan2_baseline.png", width = 6, height = 6)
+
+
+cor.test(plan2_pearson_pvt_score_baseline$pvt_perc, plan2_pearson_pvt_score_baseline$total_comp_ratio_score_1, method = "pearson")
+```
+
+##### Correlations for Test
+```{r}
+plan2_pearson_pvt_score_test <- plan2 %>%
+  dplyr::filter(condition == "test")
+
+ggscatter(plan2_pearson_pvt_score_test,
+  x = "pvt_perc", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson",
+  xlab = "PVT Percentile Scores", ylab = "Total Composite Ratio Score"
+)
+ggsave("figures/corrs/corr_score1_pvt_plan2_test.png", width = 6, height = 6)
+
+
+cor.test(plan2_pearson_pvt_score_test$pvt_perc, plan2_pearson_pvt_score_test$total_comp_ratio_score_1, method = "pearson")
+```
+
+
+```{r}
+plan2_pearson_pvt_score_l2 <- plan2 %>%
+  dplyr::distinct(codenumber, .keep_all = TRUE)
+
+ggscatter(plan2_pearson_pvt_score_l2,
+  x = "pvt_perc", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson",
+  xlab = "PVT Percentile Scores", ylab = "L2 Exposure"
+)
+ggsave("figures/corrs/corr_score1_pvt-L2_plan2_test.png", width = 6, height = 6)
+
+
+cor.test(plan2_pearson_pvt_score_l2$pvt_perc, plan2_pearson_pvt_score_l2$l2_overall, method = "pearson")
+
+describe(plan2_pearson_pvt_score_l2)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan2 <- right_join(plan2, centered_for_plan2, by = "codenumber")
+plan2 <- right_join(plan2, plan2_count, by = c("codenumber", "condition"))
+
+plan2$bilingual <- as.factor(plan2$bilingual)
+plan2$bilingual <- recode_factor(plan2$bilingual, `0` = "Monolingual", `1` = "Bilingual")
+plan2$condition <- recode_factor(plan2$condition, "baseline" = "Baseline", "test" = "Test")
+
+plan2$bilingual <- factor(plan2$bilingual, levels = c("Monolingual", "Bilingual"))
+```
+
+##### Correlations for Item
+```{r}
+plan2_pearson_item_score_test <- plan2 %>%
+  dplyr::filter(condition == "Test")
+
+ggscatter(plan2_pearson_item_score_test,
+  x = "trial_num", y = "total_comp_ratio_score_1",
+  add = "reg.line", conf.int = TRUE,
+  cor.coef = TRUE, cor.method = "pearson",
+  xlab = "Sequence Steps", ylab = "Total Composite Ratio Score"
+)
+ggsave("figures/corrs/corr_score1_trial-num_plan2_test.png", width = 6, height = 6)
+
+
+cor.test(plan2_pearson_item_score_test$trial_num, plan2_pearson_item_score_test$total_comp_ratio_score_1, method = "pearson")
+
+
+plan2 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = trial_num, y = total_comp_ratio_score_1)) +
+  geom_point(psize = 4, alpha = 0.4) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, size = 1.1) +
+  scale_fill_brewer(palette = "Darjeeling1") +
+  scale_colour_brewer(palette = "Darjeeling1") +
+  ylab("Composite Score") +
+  xlab("Sequence Steps") +
+  theme_apa() +
+  scale_y_continuous(breaks = seq(0, 100, 10)) +
+  theme(text = element_text(size = 22))
+
+ggsave("figures/test_only/steps_perc_approach2.png", width = 18, height = 12)
+```
+
+##### Baseline Means per Task
+```{r}
+pose_means <- plan2 %>%
+  dplyr::filter(condition != "Test") %>%
+  dplyr::group_by(pose) %>%
+  dplyr::summarise(mean_pose = mean(total_comp_ratio_score_1)) %>%
+  dplyr::mutate(
+    pose = case_when(
+      pose == "CB2" ~ "C2",
+      pose == "CB3" ~ "C3",
+      pose == "CB4" ~ "C4",
+      pose == "CB5" ~ "C5"
+    ),
+    trial_num = c(1:4)
+  ) %>%
+  as.data.frame()
+
+pose_means
+
+dom_language_plan2 <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  distinct(codenumber, .keep_all = TRUE) %>%
+  group_by(l1) %>%
+  count()
+
+plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  group_by(pose) %>%
+  count()
+
+plan2 %>%
+  group_by(condition, pose) %>%
+  summarise(
+    mean_score = round(mean(total_comp_ratio_score_1), 2),
+    sd_score = round(sd(total_comp_ratio_score_1), 2),
+    min_score = round(min(total_comp_ratio_score_1), 2),
+    max_score = round(max(total_comp_ratio_score_1), 2)
+  )
+```
+
+
+#### Score 1-Binary
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + trial_num + edu_c + income_c + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + trial_num + edu_c + income_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_3_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + trial_num + edu_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_4_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + trial_num + income_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_5_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + gender + trial_num + age_c + (1 | codenumber), data = ., REML = F)
+
+## WINNER!!!
+rc_6_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + trial_num + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+rc_7_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ bilingual + l3_overall + trial_num + age_c + (1 | codenumber), data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only, rc_7_test_only)
+
+
+summary(rc_1_test_only)
+```
+
+##### Running the full and final models
+```{r}
+# Full and Final Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_6_test_only)
+```
+##### Effect Size
+```{r}
+lme.dscore(rc_6_test_only, data = plan2, type = "lme4")
+```
+
+
+##### Table Summary
+
+```{r}
+modelsummary_plan2_binnary_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_6_test_only
+)
+
+
+msummary(modelsummary_plan2_binnary_test_only,
+  output = "Tables/modelsummary_plan2_binnary_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+
+plan2 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = bilingual, y = total_comp_ratio_score_1, fill = bilingual, col = bilingual)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  geom_boxplot(aes(x = as.numeric(bilingual) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  facet_wrap(vars(pose), nrow = 1) +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 30)) +
+  geom_hline(aes(yintercept = mean_pose), data = pose_means, linetype = "dashed", color = "black")
+ggsave("figures/test_only/binary_approach2.png", width = 20, height = 10)
+```
+
+#### Score 1-Continuous
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + trial_num + edu_c + income_c + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + trial_num + edu_c + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+rc_3_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + trial_num + income_c + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+rc_4_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + gender + trial_num + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+## WINNER!!!
+rc_5_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + trial_num + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+rc_6_test_only <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ l2_overall + l3_overall + trial_num + age_c + (1 | codenumber), data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only)
+
+
+summary(rc_6_test_only)
+```
+
+##### Running the full and final models
+
+```{r}
+# Full Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_5_test_only)
+```
+##### Effect Size
+```{r}
+lme.dscore(rc_5_test_only, data = plan2, type = "lme4")
+```
+
+##### Table Summary
+
+```{r}
+modelsummary_plan2_continuous_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_5_test_only
+)
+
+msummary(modelsummary_plan2_continuous_test_only,
+  output = "Tables/modelsummary_plan2_continuous_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+##### Graph
+
+```{r fig.align = 'left'}
+plan2 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = l2_overall, y = total_comp_ratio_score_1)) +
+  geom_point(psize = 4, alpha = 0.4) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, size = 1.1) +
+  scale_fill_brewer(palette = "Darjeeling1") +
+  scale_colour_brewer(palette = "Darjeeling1") +
+  ylab("Composite Score") +
+  xlab("L2 Exposure") +
+  facet_wrap(vars(pose), nrow = 1) +
+  theme_apa() +
+  scale_y_continuous(breaks = seq(0, 100, 10)) +
+  geom_vline(xintercept = 20, linetype = "dotted", color = "brown") +
+  theme(text = element_text(size = 22)) +
+  geom_hline(aes(yintercept = mean_pose), data = pose_means, linetype = "dashed", color = "black")
+
+ggsave("figures/test_only/L2_perc_approach2.png", width = 18, height = 12)
+```
+
+###### Corr 2-step
+```{r}
+plan2 %>%
+  filter(condition == "Test" & trial_num == 1) %>%
+  ggscatter(.,
+    x = "l2_overall", y = "total_comp_ratio_score_1",
+    add = "reg.line", conf.int = TRUE,
+    cor.coef = TRUE, cor.method = "pearson",
+    xlab = "L2 Percent", ylab = "Total Composite Ratio Score"
+  )
+```
+
+###### Corr 3-step
+```{r}
+plan2 %>%
+  filter(condition == "Test" & trial_num == 2) %>%
+  ggscatter(.,
+    x = "l2_overall", y = "total_comp_ratio_score_1",
+    add = "reg.line", conf.int = TRUE,
+    cor.coef = TRUE, cor.method = "pearson",
+    xlab = "L2 Percent", ylab = "Total Composite Ratio Score"
+  )
+```
+
+###### Corr 4-step
+```{r}
+plan2 %>%
+  filter(condition == "Test" & trial_num == 3) %>%
+  ggscatter(.,
+    x = "l2_overall", y = "total_comp_ratio_score_1",
+    add = "reg.line", conf.int = TRUE,
+    cor.coef = TRUE, cor.method = "pearson",
+    xlab = "L2 Percent", ylab = "Total Composite Ratio Score"
+  )
+```
+
+###### Corr 5-step
+```{r}
+plan2 %>%
+  filter(condition == "Test" & trial_num == 4) %>%
+  ggscatter(.,
+    x = "l2_overall", y = "total_comp_ratio_score_1",
+    add = "reg.line", conf.int = TRUE,
+    cor.coef = TRUE, cor.method = "pearson",
+    xlab = "L2 Percent", ylab = "Total Composite Ratio Score"
+  )
+```
+
+#### Score 1-LPA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan2_lpa <- right_join(plan2_lpa, demo_age, by = "codenumber")
+plan2_lpa$age_mo <- as.numeric(plan2_lpa$age_mo)
+
+plan2_plus_lpa <- left_join(plan2, plan2_lpa, by = "codenumber")
+plan2_plus_lpa$profiles <- as.factor(plan2_plus_lpa$profiles)
+plan2_plus_lpa$profiles <- recode_factor(plan2_plus_lpa$profiles, `1` = "Low", `2` = "Medium", `3` = "High")
+
+plan2_plus_lpa$profiles <- factor(plan2_plus_lpa$profiles, levels = c("Low", "Medium", "High"))
+```
+
+##### Correlations & Anova
+```{r}
+
+demo_plan2_lpa <- left_join(demo_plan2, plan2_lpa, by = "codenumber") %>%
+  distinct(codenumber, .keep_all = TRUE)
+demo_plan2_lpa$profiles <- as.factor(demo_plan2_lpa$profiles)
+
+describeBy(demo_plan2_lpa, demo_plan2_lpa$profiles)
+
+one.way <- aov(pvt_perc ~ profiles, data = demo_plan2_lpa)
+
+summary(one.way)
+
+cor.test(demo_plan2_lpa$pvt_perc, demo_plan2_lpa$l2_overall, method = "pearson")
+```
+
+##### Models
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + trial_num + edu_c + income_c + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+summary(rc_1_test_only)
+
+rc_2_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + trial_num + edu_c + income_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_3_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + trial_num + edu_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_4_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + trial_num + income_c + age_c + (1 | codenumber), data = ., REML = F)
+
+rc_5_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + gender + trial_num + age_c + (1 | codenumber), data = ., REML = F)
+
+##WINNER!!!
+rc_6_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + trial_num + age_c + pvt_perc + (1 | codenumber), data = ., REML = F)
+
+rc_7_test_only <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  lmer(total_comp_ratio_score_1 ~ profiles + l3_overall + trial_num + age_c + (1 | codenumber), data = ., REML = F)
+
+performance::compare_performance(rc_1_test_only, rc_2_test_only, rc_3_test_only, rc_4_test_only, rc_5_test_only, rc_6_test_only, rc_7_test_only)
+
+
+summary(rc_1_test_only)
+```
+##### Effect Size
+```{r}
+lme.dscore(rc_6_test_only, data = plan2_plus_lpa, type = "lme4")
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_1_test_only)
+
+# Final Model
+summary(rc_6_test_only)
+```
+
+##### Table Summary
+
+```{r}
+modelsummary_plan2_binnary_test_only <- list(
+  "Full Model" = rc_1_test_only,
+  "Final Model" = rc_6_test_only
+)
+
+msummary(modelsummary_plan2_binnary_test_only,
+  output = "Tables/modelsummary_plan2_LPA_test_only.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = profiles, y = total_comp_ratio_score_1, fill = profiles, col = profiles)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.3) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  geom_boxplot(aes(x = as.numeric(profiles) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Multilingual Exposure Profile") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  facet_wrap(vars(pose), nrow = 1) +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 30)) +
+  geom_hline(aes(yintercept = mean_pose), data = pose_means, linetype = "dashed", color = "black")
+ggsave("figures/test_only/lpa_approach2.png", width = 20, height = 10)
+```
+
+### #3: Low loads vs. high loads [AKA exploratory analysis]
+
+In this analysis I classify poses 2 & 3 as low load and 4 & 5 as high load  
+- score_1 = totalsteps + totalpairs
+
+Only Test Trials
+
+```{r}
+plan3 <- plan2 %>%
+  dplyr::filter(condition == "Test") %>%
+  dplyr::mutate(load = case_when(
+    pose %in% c("C2", "C3") ~ 0,
+    pose %in% c("C4", "C5") ~ 1
+  ))
+```
+
+#### Models
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan3$load <- as.factor(plan3$load)
+plan3$load <- recode_factor(plan3$load, "0" = "Low", "1" = "High")
+```
+
+#### Score 1-Binary
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1 <- lmer(total_comp_ratio_score_1 ~ bilingual * load + l3_overall + gender + age_c + (1 | codenumber), data = plan3, REML = F)
+
+rc_2 <- lmer(total_comp_ratio_score_1 ~ bilingual * load + l3_overall + gender + age_c * load + (1 | codenumber), data = plan3, REML = F)
+
+rc_3 <- lmer(total_comp_ratio_score_1 ~ bilingual * load + l3_overall + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan3, REML = F)
+
+rc_4 <- lmer(total_comp_ratio_score_1 ~ bilingual * load + l3_overall + age_c + (1 | codenumber), data = plan3, REML = F)
+
+performance::compare_performance(rc_3, rc_4)
+
+summary(rc_4)
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4)
+
+performance::check_outliers(rc_4)
+```
+
+##### Effect Size
+```{r}
+lme.dscore(rc_4, data = plan3, type = "lme4")
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_3)
+
+# Final Model
+summary(rc_4)
+```
+##### Table Summary
+```{r}
+modelsummary_plan3_binnary <- list(
+  "Full Model" = rc_3,
+  "Final Model" = rc_4
+)
+
+msummary(modelsummary_plan3_binnary,
+  output = "Tables/modelsummary_plan3_binnary.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+plan3 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = bilingual, y = total_comp_ratio_score_1, fill = bilingual, col = bilingual)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  facet_wrap("load") +
+  geom_boxplot(aes(x = as.numeric(bilingual) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32))
+ggsave("figures/test_only/binary_approach3.png", width = 14, height = 12)
+```
+
+#### Score 1-Continuous
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rc_1 <- lmer(total_comp_ratio_score_1 ~ l2_overall * load + l3_overall + gender + age_c + (1 | codenumber), data = plan3, REML = F)
+rc_2 <- lmer(total_comp_ratio_score_1 ~ l2_overall * load + l3_overall + gender + edu_c + income_c + age_c * load + (1 | codenumber), data = plan3, REML = F)
+rc_3 <- lmer(total_comp_ratio_score_1 ~ l2_overall * load + l3_overall + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan3, REML = F)
+rc_4 <- lmer(total_comp_ratio_score_1 ~ l2_overall * load + l3_overall + age_c + (1 | codenumber), data = plan3, REML = F)
+
+
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4)
+summary(rc_4)
+performance::check_outliers(rc_4)
+performance::check_collinearity(rc_4)
+```
+
+##### Graph
+```{r fig.align = 'left'}
+plan3 %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = l2_overall, y = total_comp_ratio_score_1, col = load)) +
+  geom_point(size = 4, alpha = 0.4, show.legend = FALSE) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, size = 1.1, show.legend = FALSE) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_colour_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  ylab("Composite Score") +
+  xlab("L2 Exposure") +
+  facet_wrap("load") +
+  theme_apa() +
+  scale_y_continuous(breaks = seq(0, 100, 10)) +
+  geom_vline(
+    xintercept = 20, linetype = "dotted",
+    color = "brown"
+  ) +
+  theme(text = element_text(size = 32))
+ggsave("figures/test_only/L2_perc_approach3.png", width = 18, height = 12)
+```
+
+##### Effect Size
+```{r}
+lme.dscore(rc_4, data = plan3, type = "lme4")
+```
+
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_3)
+
+# Final Model
+summary(rc_4)
+```
+
+##### Table Summary
+```{r}
+modelsummary_plan3_continous <- list(
+  "Full Model" = rc_3,
+  "Final Model" = rc_4
+)
+
+msummary(modelsummary_plan3_continous,
+  output = "Tables/modelsummary_plan3_continous.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+#### Score 1-LPA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan3_lpa <- plan2_plus_lpa %>%
+  dplyr::filter(condition == "Test") %>%
+  dplyr::mutate(load = case_when(
+    pose %in% c("C2", "C3") ~ 0,
+    pose %in% c("C4", "C5") ~ 1
+  ))
+
+
+plan3_lpa$load <- as.factor(plan3_lpa$load)
+plan3_lpa$load <- recode_factor(plan3_lpa$load, `0` = "Low", `1` = "High")
+
+plan3_lpa$load <- factor(plan3_lpa$load, levels = c("Low", "High"))
+
+
+rc_1 <- lmer(total_comp_ratio_score_1 ~ profiles * load + age_c * load + (1 | codenumber), data = plan3_lpa, REML = F)
+rc_2 <- lmer(total_comp_ratio_score_1 ~ profiles * load + gender + edu_c + income_c + age_c * load + (1 | codenumber), data = plan3_lpa, REML = F)
+rc_3 <- lmer(total_comp_ratio_score_1 ~ profiles * load + gender + age_c + (1 | codenumber), data = plan3_lpa, REML = F)
+rc_4 <- lmer(total_comp_ratio_score_1 ~ profiles * load + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan3_lpa, REML = F)
+rc_5 <- lmer(total_comp_ratio_score_1 ~ profiles * load + age_c + (1 | codenumber), data = plan3_lpa, REML = F)
+performance::check_outliers(rc_5)
+
+summary(rc_5)
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4, rc_5)
+```
+
+
+##### Effect Size
+```{r}
+lme.dscore(rc_5, data = plan3_lpa, type = "lme4")
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_4)
+
+# Final Model
+summary(rc_5)
+```
+
+##### Table Summary
+```{r}
+modelsummary_plan3_lpa <- list(
+  "Full Model" = rc_4,
+  "Final Model" = rc_5
+)
+
+msummary(modelsummary_plan3_lpa,
+  output = "Tables/modelsummary_plan3_lpa.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan3_lpa %>%
+  dplyr::filter(condition == "Test" & !is.na(pvt_perc)) %>%
+  ggplot(., aes(x = profiles, y = total_comp_ratio_score_1, fill = profiles, col = profiles)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  facet_wrap("load") +
+  geom_boxplot(aes(x = as.numeric(profiles) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32))
+
+ggsave("figures/test_only/lpa_approach3.png", width = 14, height = 12)
+```
+
+
+### #4: Supplementary Material (Condition as a variable)
+
+In this analysis I cinclude condition as a variable interacted with Bilingualism
+- score_1 = totalsteps + totalpairs
+
+#### Models
+
+#### Score 1-Binary
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+rc_1 <- lmer(total_comp_ratio_score_1 ~ bilingual * condition + l3_overall + gender + age_c + (1 | codenumber), data = plan2, REML = F)
+
+rc_2 <- lmer(total_comp_ratio_score_1 ~ bilingual * condition + gender + age_c + (1 | codenumber), data = plan2, REML = F)
+
+rc_3 <- lmer(total_comp_ratio_score_1 ~ bilingual * condition + l3_overall + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan2, REML = F)
+
+rc_4 <- lmer(total_comp_ratio_score_1 ~ bilingual * condition + l3_overall + age_c + (1 | codenumber), data = plan2, REML = F)
+
+
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4)
+
+performance::check_outliers(rc_4)
+
+summary(rc_4)
+```
+
+##### Effect Size
+```{r}
+lme.dscore(rc_4, data = plan2, type = "lme4")
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_3)
+
+# Final Model
+summary(rc_4)
+```
+##### Table Summary
+```{r}
+modelsummary_plan3_binnary <- list(
+  "Full Model" = rc_3,
+  "Final Model" = rc_4
+)
+
+msummary(modelsummary_plan3_binnary,
+  output = "Tables/modelsummary_plan4_binnary.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+plan2 %>%
+  dplyr::filter(!is.na(pvt_perc)) %>%
+  ggplot(., aes(x = bilingual, y = total_comp_ratio_score_1, fill = bilingual, col = bilingual)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  facet_wrap(vars(condition, pose), nrow = 2) +
+  geom_boxplot(aes(x = as.numeric(bilingual) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32))
+ggsave("figures/baseline-test/binary_approach4.png", width = 14, height = 12)
+```
+
+#### Score 1-Continuous
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+rc_1 <- lmer(total_comp_ratio_score_1 ~ l2_overall * condition + l3_overall + gender + age_c + (1 | codenumber), data = plan2, REML = F)
+rc_2 <- lmer(total_comp_ratio_score_1 ~ l2_overall * condition + l3_overall + gender + edu_c + income_c + age_c * condition + (1 | codenumber), data = plan2, REML = F)
+rc_3 <- lmer(total_comp_ratio_score_1 ~ l2_overall * condition + l3_overall + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan2, REML = F)
+rc_4 <- lmer(total_comp_ratio_score_1 ~ l2_overall * condition + l3_overall + age_c + (1 | codenumber), data = plan2, REML = F)
+
+
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4)
+summary(rc_4)
+performance::check_outliers(rc_4)
+performance::check_collinearity(rc_4)
+```
+
+##### Graph
+```{r fig.align = 'left'}
+plan2 %>%
+  dplyr::filter(!is.na(pvt_perc)) %>%
+  ggplot(., aes(x = l2_overall, y = total_comp_ratio_score_1, col = condition)) +
+  geom_point(size = 4, alpha = 0.4, show.legend = FALSE) +
+  geom_smooth(method = "lm", formula = y ~ x, se = TRUE, size = 1.1, show.legend = FALSE) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  scale_colour_manual(values = wes_palette("Darjeeling1", n = 2, type = "continuous")) +
+  ylab("Composite Score") +
+  xlab("L2 Exposure") +
+  facet_wrap(vars(condition, pose), nrow = 2) +
+  theme_apa() +
+  scale_y_continuous(breaks = seq(0, 100, 10)) +
+  geom_vline(
+    xintercept = 20, linetype = "dotted",
+    color = "brown"
+  ) +
+  theme(text = element_text(size = 32))
+ggsave("figures/baseline-test/L2_perc_approach4.png", width = 18, height = 12)
+```
+
+##### Effect Size
+```{r}
+lme.dscore(rc_4, data = plan2, type = "lme4")
+```
+
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_3)
+
+# Final Model
+summary(rc_4)
+```
+
+##### Table Summary
+```{r}
+modelsummary_plan4_continous <- list(
+  "Full Model" = rc_3,
+  "Final Model" = rc_4
+)
+
+msummary(modelsummary_plan4_continous,
+  output = "Tables/modelsummary_plan4_continous.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+#### Score 1-LPA
+
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+
+rc_1 <- lmer(total_comp_ratio_score_1 ~ profiles * condition + age_c + edu_c + (1 | codenumber), data = plan2_plus_lpa, REML = F)
+rc_2 <- lmer(total_comp_ratio_score_1 ~ profiles * condition + gender + edu_c + income_c + age_c * condition + (1 | codenumber), data = plan2_plus_lpa, REML = F)
+rc_3 <- lmer(total_comp_ratio_score_1 ~ profiles * condition + gender + age_c + (1 | codenumber), data = plan2_plus_lpa, REML = F)
+rc_4 <- lmer(total_comp_ratio_score_1 ~ profiles * condition + gender + edu_c + income_c + age_c + (1 | codenumber), data = plan2_plus_lpa, REML = F)
+rc_5 <- lmer(total_comp_ratio_score_1 ~ profiles * condition + age_c + (1 | codenumber), data = plan2_plus_lpa, REML = F)
+performance::check_outliers(rc_5)
+
+summary(rc_5)
+performance::compare_performance(rc_1, rc_2, rc_3, rc_4, rc_5)
+```
+
+
+##### Effect Size
+```{r}
+lme.dscore(rc_5, data = plan2_plus_lpa, type = "lme4")
+```
+
+##### Running the full and final models
+```{r}
+# Full Model
+summary(rc_4)
+
+# Final Model
+summary(rc_5)
+```
+
+##### Table Summary
+```{r}
+modelsummary_plan4_lpa <- list(
+  "Full Model" = rc_4,
+  "Final Model" = rc_5
+)
+
+msummary(modelsummary_plan4_lpa,
+  output = "Tables/modelsummary_plan4_lpa.docx",
+  stars = TRUE, align = "lcc", metrics = c("RMSE", "R2", "AIC", "BIC", "Log.Lik.", "F")
+)
+```
+
+##### Graph
+```{r echo=FALSE, message=FALSE, warning=FALSE,fig.align = 'left'}
+plan2_plus_lpa %>%
+  dplyr::filter(!is.na(pvt_perc)) %>%
+  ggplot(., aes(x = profiles, y = total_comp_ratio_score_1, fill = profiles, col = profiles)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .2, adjust = 4) +
+  geom_point(position = position_jitter(width = .15), size = 4, alpha = 0.4) +
+  scale_fill_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  scale_color_manual(values = wes_palette("Darjeeling1", n = 3, type = "continuous")) +
+  guides(fill = FALSE, col = FALSE) +
+  facet_wrap(vars(condition, pose), nrow = 2) +
+  geom_boxplot(aes(x = as.numeric(profiles) + 0.25, y = total_comp_ratio_score_1), outlier.shape = NA, alpha = 0.4, width = .1, colour = "BLACK") +
+  ylab("Composite Score") +
+  xlab("Language Group") +
+  stat_summary(fun.data = "mean_cl_normal", geom = "errorbar", width = 1 / 4, color = "black") +
+  stat_summary(fun = "mean", geom = "point", color = "black") +
+  theme_apa() +
+  scale_y_continuous(
+    labels = paste(seq(0, 100, by = 10), "%"),
+    breaks = seq(0, 100, by = 10),
+    limits = c(0, 100)
+  ) +
+  theme(text = element_text(size = 32))
+
+ggsave("figures/baseline-test/lpa_approach4.png", width = 14, height = 12)
+```

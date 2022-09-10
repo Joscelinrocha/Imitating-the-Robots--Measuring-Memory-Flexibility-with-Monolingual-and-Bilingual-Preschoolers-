@@ -1,0 +1,155 @@
+﻿codenumber,task_not_performed,drop,reason,CB,C2,C3,C4,C5,CB_reason,C2_reason,C3_reason,C4_reason,C5_reason,comments
+8009,0,1,pilot,0,999,0,1,0,0,0,0,expt_error,0,"Not our usual poses with Robot. This was our first pilot with Robots; spreadsheet says N/A for baseline, training, 4-step, and 5-step"
+8099,0,1,pilot,0,999,0,1,0,0,0,0,expt_error,0,"Not our usual robot sequences; spreadsheet says N/A for baseline, training, 2-step, and 5-step"
+7429,0,0,,0,999,0,1,0,0,0,0,expt_error,0,4-step is not our usual 4-step (i.e. not MJ4); N/A for training and 2-step
+7643,0,0,,0,999,0,1,0,0,0,0,expt_error,0,4-step is not our usual 4-step (i.e. not MJ4); N/A for training and 2-step
+7644,0,0,,0,999,0,999,999,0,0,0,0,0,"Robots: 2 min baseline; N/A for training, 2-step, and 5-step"
+7740,0,0,,0,999,0,1,1,0,0,0,0,0,"UNSURE: N/A written for training, 2-step, 4-step, and 5-step"
+7768,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8352,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7672,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8378,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8349,0,1,video problems,0,0,0,0,1,0,0,0,0,child_error,Didn't really make it through any of the tasks
+8000,0,0,,0,0,0,1,999,0,0,0,child_error,0,Did not want to do test for 4 step; N/A for 5-step
+7690,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7728,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7630,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7760,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7649,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7737,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8389,0,0,,0,0,0,0,0,0,0,0,0,0,0
+123,0,1,,0,999,0,999,0,0,0,0,0,0,"N/A for training, 2-step , 3-step, 4-step, and 5-step"
+124,0,1,,0,999,0,1,0,0,0,0,expt_error,0,"Not our usual 4-step pose; N/A for baseline, training, 2-step, and 5-step; "
+125,0,1,,0,999,0,0,0,0,0,0,0,0,"N/A for Training, 2-step, 3-step, 4-step, and 5-step"
+126,0,1,,0,999,0,1,0,0,0,0,expt_error,0,"Not our usual 4-step pose; N/A for Baseline, Training, 2-step, and 5-step"
+127,0,1,,0,999,0,1,0,0,0,0,expt_error,0,"Not our usual 4-step pose; N/A for Baseline, Training, 2-step, and 5-step"
+133,0,1,,0,0,0,1,0,0,0,0,0,0,N/A for baseline
+134,0,1,,0,999,0,0,0,0,0,0,0,0,N/A for baseline 
+135,0,1,,0,0,0,0,0,0,0,0,0,0,0
+137,0,1,,0,0,0,0,0,0,0,0,0,0,0
+138,0,1,,0,0,0,0,0,0,0,0,0,0,0
+139,0,1,,0,0,0,0,0,0,0,0,0,0,0
+128,1,1,,0,999,0,999,0,0,0,0,0,0,"N/A for baseline, training, 2-step, 3-step, 4-step, and 5-step"
+8334,1,0,,0,999,0,999,0,0,0,0,0,0,"N/A  for baseline, training, 2-step, 3-step, 4-step, and 5-step"
+8107,0,1,refused to play,1,0,0,0,0,child_error,0,0,0,0,Did not want to play with robots.
+7797,0,0,,0,0,0,0,0,0,0,0,0,0,0
+7818,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8036,,,,,,,,,0,0,0,0,0,0
+7980,0,1,pilot,0,0,0,0,0,0,0,0,0,0,0
+8199,0,0,refused to play,0,0,1,1,,0,0,child_error,child_error,0,"Robots: child uninterested in task, could not complete all poses or MC; N/A for 5-step; did not complete all poses or MC"
+8222,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8050,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8433,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8219,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8421,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8489,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8422,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8356,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8092,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8435,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8093,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8217,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8390,0,1,video problems,0,0,0,0,0,0,0,0,0,0,0
+8488,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8152,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8376,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8368,0,0,,0,0,0,0,1,0,0,0,0,child_error,"Completed up to 4 step robots, some MCs complete. Tested on both yellow and blue robots on 4 step. Didn't want to play with baseline robots, 5 step not attempted as child was losing focus; N/A for 5-step "
+8402,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8155,0,0,,0,0,0,999,999,0,0,0,0,0,Only 2 step and 3 step robots demo'd and tested because child was uninterested and spent majority of time playing with robots on his own; N/A for 4-step robots and 5-step robots
+8590,0,0,,1,0,999,999,999,0,0,0,0,0,UNSURE ABOUT BASELINE; Was only able to demo 2 step and 3 step robots. Child took experimenter's white robot instead of yellow one for 3 step test. Baseline not filmed in entirety because child walked away. MC not attempted. Child not able to listen to instructions; N/A for 4-step and 5-step
+8277,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8685,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8319,0,1,video problems,0,0,0,0,0,0,0,0,0,0,0
+8498,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8097,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8419,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8678,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8231,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8541,0,0,,0,0,0,999,999,0,0,0,0,0,"Did baseline and training on robots, only would test on 2 step and 3 step robots. Child asked to play another game because he didn't like that one; N/A for 4-step and 5-step"
+8437,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8525,0,0,,0,0,0,999,999,0,0,0,0,0,"Didn't complete all 4 poses or MC of robots. Child too interested in playing with robots on his own. Did label toys ""robots"" without being asked or prompted; N/A for 5-step"
+8429,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8543,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8581,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8580,0,0,,0,0,0,0,999,0,0,0,0,0,WATCH: No notes on spreadsheet
+8228,0,0,,0,0,0,0,999,0,0,0,0,0,"Labeled robot a ""robot"" during baseline. Child attended to demos. Didn't want to play with her blue robot, so tested on other colored ones. 5 step not demo'd and not all poses MC'd as child was losing interest;  N/A for 5-step"
+8229,0,0,,0,0,0,0,999,0,0,0,0,0,"Labeled robot a ""robot"" during baseline. Child attended to demos. Would only test on her red robot if she could play with experimenter's green robot after red robot test. Was losing interest pretty quickly. 5 step not demo'd. Couldn’t get through all MCs because child wanted to play another game. N/A for 5-step"
+8391,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8652,0,0,child refuses to engage,0,0,0,1,999,0,0,0,child_error,0,"No test on 4 step and 5 step not demo'd or tested because child became uninterested and walked away; nothing written for baseline, 2-step, 3-step, and 4-step; N/A for 5-step"
+8428,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8466,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8672,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8544,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8605,0,0,,0,0,0,1,999,0,0,0,child_error,0,UNSURE Child tested on white robot for 4 step because he didn't want to play with his anymore. 5 step not demo'd and not all MCs complete because child was losing focus. 2 step initiated correctly. N/A for 5-step
+8696,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8360,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8566,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8436,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8556,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8670,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8423,1,0,,0,0,0,0,0,0,0,0,0,0,0
+8481,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8619,0,0,,0,0,0,999,999,0,0,0,0,0,"Not very interested in robots. Only 2, 3, 4 step demo'd and tested as child was starting to lose focus. MCs complete on 2, 3, 4 step but on different colored robots; N/A for 5-step robots"
+8712,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8431,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8973,0,0,,0,0,0,0,1,0,0,0,0,child_error,"UNSURE Completed baseline, training, 2 step, 3 step, 4 step robots. Was getting distracted and uninterested by 4 step. Tried to do MCs after robots and after FIM-An but child repeatedly said she didn't want to; N/A for 5-step"
+8754,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8594,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8702,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8572,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8760,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8757,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8732,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8506,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8720,0,1,only baseline and no tests,0,999,999,999,999,0,0,0,0,0,"Did robots baseline, training, demo'd and tested 2 step only. Child didn't want to engage. Recc drop on robots"
+8765,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8759,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8409,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8460,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8571,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8763,0,0,,0,0,0,1,1,0,0,0,no_touch,child_error,"UNSURE Recc drop robots. Did 60s baseline but wouldn't complete all of training. Didn't engage after 3 step demo. No MC's completed. 4-step: demo red, child didn't want to test. N/A for 5-step"
+8722,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8551,0,0,,0,0,1,1,1,0,0,child_error,child_error,child_error,"Robots incomplete, only made it through 2 step and 3 step demo, but only 2 step test. Recc drop on robots. Nothing written for baseline, training, 2-step, 3-step, 4-step, and 5-step"
+8713,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8764,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8742,0,0,no generalization child refused to use other robots. Keep baseline only,0,1,1,1,1,0,child_error,child_error,child_error,child_error,"Robots - recommend drop - child insisted on using experimenter's robot and became visibly distressed; incomplete only made it through 2-step, no MCs performed"
+8834,0,0,,0,0,0,0,1,0,0,0,0,child_error,"Made it through 2, 3, and 4 step poses and MCs before child lost interest; N/A for 5-step"
+9046,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8766,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8819,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8699,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8733,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8709,0,0,,0,0,0,1,1,0,0,0,child_error,child_error,"Robots: baseline complete, training, child snapped arm too far so experimenter switched child's robot to red and finished training. 2 step complete. Nothing written for baseline, training, 2-step, 3-step, 4-step, and 5-step"
+8374,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8814,0,0,,0,0,0,0,1,0,0,0,0,0,"Child refused to do MCs, was not interested in recreating poses. N/A written for 5-step"
+8718,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8981,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8969,0,0,,0,0,0,1,1,0,0,0,child_error,child_error,"Child repeatedly asked to see all robots in the bag, was uninterested in creating poses. N/A for 4-step and 5-step"
+8266,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9069,0,1,no engagement. Child refused,0,0,0,0,0,0,0,0,0,0,0
+8517,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9029,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8998,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8769,0,1,no video recorded,0,0,0,0,0,0,0,0,0,0,0
+9169,0,1,no video recorded,0,0,0,0,0,0,0,0,0,0,0
+9163,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8736,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9034,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8725,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9116,0,1,no video recorded,0,0,0,0,0,0,0,0,0,0,0
+8751,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8767,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8866,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8971,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8890,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8552,0,0,,0,0,0,0,1,0,0,0,0,0,"WATCH 2/2, 3/3, 4/4, 5/5"
+9080,0,0,tired,0,0,0,0,1,0,0,0,0,child_error,"Robot: child was distracted and didn't really want to play, 2/2 but raised both arms at the end of step 2, 0/3, 3/4 - she put the leg to the side instead of the front, didn't get to step 5 and didn't do MC, child bored and distracted"
+9162,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8744,0,0,,0,1,0,0,0,0,tech_error,0,0,0,"Robot: missing an angle for step 2 b/c one of the other children was in the way, but completed all the trials so no reason for MC. B: white, Test: yellow, demo green"
+8987,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9128,0,0,child refuses to engage bc is tired,0,0,1,0,0,0,0,child_error,0,0,"Robot: 2/2, 2/3, 2/4, 3/5: not focused, had to finish robots at the end; MC 3-step = pass; MC 4&5-step = fail; had trouble moving the parts on his own"
+8908,0,0,out of frame but notes say that child didn't do any correct behaviors,0,0,0,0,0,0,0,0,0,0,0
+9056,0,0,,0,0,0,0,0,0,0,0,0,0,0
+8748,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9052,0,0,,0,0,0,0,0,0,0,0,0,0,0
+9095,0,0,,0,0,0,0,0,0,0,0,0,0,

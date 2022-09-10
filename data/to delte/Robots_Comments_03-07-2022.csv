@@ -1,0 +1,465 @@
+123 ,123 48,OB,, CB,48,M,39372,Movement 3 child moves right leg in a nearly continual movement from side to frontal orginal position then back to side (movement 4)
+123 ,123 48,OB,, CB,48,M,43248,Movement 5 child moves right leg back to original frontal position
+123 ,123 48,OB,, CB,48,M,45417,Movement 6 child moves left leg back to original frontal position
+123 ,123 48,OB,, CB,48,M,80913,Movement 9 child moves right leg from back to original frontal position
+126 ,126 36,MO,, C3,36,M,74565,robot reset
+127 ,127 48,TS,, C3,48,m,89488,Child keeps twisting and turning; difficult to follow; distracted
+127 ,127 48,TS,, C3,48,m,94884,Robot reset by experimenter
+127 ,127 48,TS,, C3,48,m,133192,Child tries to grab things from bag
+130 ,130 60,MO,, CB,60,x,34182,Child moves robots legs as if it is walking
+130 ,130 60,MO,, CB,60,x,41186,child spins robot's head around
+131 ,131 60,MO,, C5,60,f,0,child did 0 movements and did not interact with the robot
+131 ,131 60,MO,, C5,60,f,340918,child comments "I dont remember"
+131 ,131 60,TS,, C3,60,f,178242,experimenter resets robot
+131 ,131 60,TS,, C3,60,f,184041,While moving right arm; left arm gets accidentally pushed back to standard position by child's palm
+131 ,131 60,TS,, C3,60,f,189542,child gets pose correct on second try
+132 ,132 54,TS,, C5,54,m,222356,experimenter switches order between right leg front and left leg front during demo - counted left leg before right leg as correct
+132 ,132 54,TS,, C5,54,m,259877,Left arm up goes back to standard as he brings head front
+134 ,134 36,OB,, C5,36,M,381258,After movement 7; child picks up robot and both legs revert back to original position
+134 ,134 36,MO,, C4,36,M,247188,robot reset
+134 ,134 36,MO,, C4,36,M,262616,robot reset
+134 ,134 36,OB,, C3,36,M,167596,Experimenter asks child to "show me again" after movement 3
+135 ,135 36,MO,, C4,36,F,255103,head snapped back into place when child moved left arm forward
+135 ,135 36,TS,, C3,36,f,169402,reset
+135 ,135 36,TS,, C3,36,f,174449,
+136 ,136 60,TS,, C5,60,M,316187,robot reset
+136 ,136 60,TS,, MJ4,60,M,228650,robot reset
+136 ,136 60,TS,, MJ4,60,M,234710,the robot markings were facing the child but the head was fcing away from the child - coded movements as back orientation
+136 ,136 60,TS,, C3,60,M,153548,robot reset
+137 ,137 40,MO,, C4,40,F,265930,both arms snap back into original positions when child moves head to original position
+137 ,137 40,MO,, C4,40,F,270781,right arm snaps back into original position
+137 ,137 40,MO,, C4,40,F,287427,robot reset
+137 ,137 40,TS,, C3,40,F,181895,
+137 ,137 40,TS,, C2,40,F,128269,
+138 ,138 36,OB,, C4,36,F,365925,After movement 4; experimenter resets robot to original position and places it in front of child 
+138 ,138 36,OB,, C2,36,F,191691,After movement 2; experimenter asks child to "show me again"
+139 ,139 36,MO,, C5,36,M,434090,robot reset
+139 ,139 36,MO,, C5,36,M,467121,robot reset
+139 ,139 36,OB,, C4 ,36,M,323093,After movement 3; child hands robot to experimenter; who resets robot to original position and places robot in front of child 
+139 ,139 36,OB,, C4 ,36,M,338751,After movement 5; child put robot face down on floor. Experimenter resets robot and places it front of child 
+6654,665460,MO,, CB,60,m,58004,child pulls arms out away from body
+6654,665460,MO,, C5,60,M,360779,robot reset
+6654,665460,MO,, C4,60,M,263964,robot reset
+6654,665460,MO,, C3,60,M,180661,robot reset
+6660,666060,MO,, CB,60,m,24616,child tries to move the arms down
+6826,682660,MO,, CB,60,m,27234,child tries to move arms down
+6826,682660,MO,, CB,60,m,38182,child pulls leg out
+6826,682660,MO,, C5,60,M,291010,child plays with robot in completed pose as if it is a dog
+6826,682660,MO,, C5,60,M,296352,child resets robot to original position after completing pose
+6826,682660,MO,, C5,60,M,307760,child grabs white robot from behind experimenter's back and drops the red robot
+6883,688360,MO,, CB,60,f,55998,child spins arms around
+6883,688360,MO,, C5,60,F,353407,child simultaneously snaps both legs back into original positions
+6883,688360,MO,, C5,60,F,361896,robot reset
+6883,688360,MO,, C4,60,F,262636,robot reset
+6883,688360,MO,, C3,60,F,184203,left arm was knocked back into original position
+6883,688360,MO,, C3,60,F,189149,robot reset
+6937,693760,MO,, CB,60,f,115520,child tries to push arms down
+6999,699960,MO,, CB,60,f,45186,child moves robots legs as if its walking
+6999,699960,MO,, C5,60,F,394340,child comments "i forgot what to do"
+6999,699960,MO,, C4,60,F,284204,child grabs blue robot while experimenter continues to demo. Child moves arms up while experimenter tries to finish demo
+6999,699960,MO,, C4,60,F,312557,child moves head forward causing both arms to snap into original positions
+6999,699960,MO,, C3,60,F,217230,robot reset
+7003,700360,MO,, CB,60,f,59572,child says she does not want to play with the robot
+7003,700360,MO,, CB,60,f,117290,child does not engage with robot
+7003,700360,MO,, C3,60,F,209373,robot reset
+7003,700360,MO,, C3,60,F,220930,left arm snaps back into original position
+7017,701760,MO,, CB,60,f,75242,Left arm snaps back into place
+7042,704260,MO,, CB,60,f,56168,right arm snaps back into original position
+7042,704260,MO,, C4,60,f,332078,right leg snaps back into original position
+7042,704260,MO,, C4,60,f,338368,left leg snaps back into original position
+7042,704260,MO,, C4,60,f,339558,right leg snaps back into original position
+7053,705360,MO,, C5,60,m,288076,
+7053,705360,MO,, C3,60,m,0,childs hand snaps right arm back into original position
+7053,705360,MO,, C3,60,m,143374,Child pretends that the robot walks; did not code those movements as they were not manipulations 
+7053,705360,MO,, C4,60,m,223721,
+7060,706060,MO,, CB,60,m,36516,child pulls robots leg out
+7060,706060,MO,, CB,60,m,53856,Child tries to pull right arm down
+7060,706060,MO,, C5,60,m,392292,left leg is knocked back into original position
+7060,706060,MO,, C4,60,m,278222,robot reset
+7060,706060,MO,, C3,60,m,220592,child hands robot back to experimenter
+7065,706560,MO,, CB,60,m,16396,child says he doesnt want to play
+7065,706560,MO,, CB,60,m,90123,child does not engage with robot
+7065,706560,MO,, C3,60,m,206654,robot reset
+7067,706760,MO,, C5,60,F,371359,robot reset
+7067,706760,MO,, C3,60,F,162068,robot reset
+7077,707760,MO,, CB,60,m,99008,child tries to pull arm down
+7077,707760,MO,, C5,60,M,407811,child plays with robot; causing legs to snap back into original positions
+7077,707760,MO,, C5,60,M,450472,child plays with robot; causing legs to snap back into original positions
+7077,707760,MO,, C5,60,M,477558,floor causes left arm to snap back into original position
+7077,707760,MO,, C5,60,M,478900,floor causes right arm to snap back into original position
+7095,709560,MO,, CB,60,f,134334,child tries to push arms down
+7095,709560,MO,, C5,60,F,419565,simultaneously tries to pull both legs back
+7095,709560,MO,, C5,60,F,434497,head gets knocked back into place
+7095,709560,MO,, C5,60,F,534638,child gets up and uses bathroom
+7095,709560,MO,, C5,60,F,552285,child moves head forward causing both arms to snap back into their original positions
+7095,709560,MO,, C5,60,F,555273,head snapc back into original position
+7095,709560,MO,, C5,60,F,565849,child moves head forward causing both arms to snap back into their original positions
+7110,711060,MO,, CB,60,m,8262,child moves robot as if its walking
+7110,711060,MO,, C5,60,m,323994,child plays with robot upon completing the pose; causing arms; legs and head to snap back into original positions
+7110,711060,MO,, C4,60,m,241051,plays with robot while singing; moving left leg forwards and backwards 
+7110,711060,MO,, C4,60,m,247176,child moves head back to original position; causing both arms to snap back into original positions
+7146,714660,MO,, CB,60,f,45968,child tries to push right arm down
+7146,714660,MO,, CB,60,f,47022,child tries to push left arm down
+7146,714660,MO,, C4,60,F,285900,child moves head forward causing right arm to move back to original position
+7146,714660,MO,, C4,60,F,287554,head snaps back into original position
+7148,714860m,MO,, C5,60m,M,440190,robot reset
+7148,714860m,MO,, C4,60m,M,341102,child moved left and right arms up simultaneously 
+7148,714860m,MO,, C4,60m,M,347493,robot reset
+7148,714860m,MO,, C3,60m,M,277171,robot reset
+7151,715160,MO,, CB,60,f,10574,child pulls head up
+7151,715160,MO,, CB,60,f,21284,child pulls both arms out
+7151,715160m,MO,, C5,60m,F,305985,child plays with robot in completed position; causing both legs to snap back into original position
+7176,717660m,MO,, C5,60m,M,339083,simultaneously tries to pull both legs forward
+7176,717660m,MO,, C5,60m,M,345313,simultanouesly pulls both legs forward
+7176,717660m,MO,, C5,60m,M,353195,simultaneously tries to pull both arms down
+7176,717660m,MO,, C5,60m,M,353632,simultaneously pulls down arms back into original positions
+7176,717660m,MO,, C5,60m,M,376549,left leg gets knocked back into original position
+7176,717660,MO,, C4,60,M,0,
+7176,717660,MO,, C4,60,M,242264,child tries to move head forward; knocking left leg back into original position
+7176,717660,MO,, C3,60,M,164324,child puts robot behind his back and attempts to reset it; imitating experimenter
+7176,717660,MO,, C3,60,M,173663,experimenter resets robot
+7176,717660,MO,, C3,60,M,181735,child puts robot behind his back and attempts to reset it
+7250,725060,MO,, CB,60,f,22100,child tries to push arms down
+7250,725060,MO,, C5,60,f,425816,right arm snaps back into original position
+7250,725060,MO,, C5,60,f,427550,left arms snaps back into original position
+7250,725060,MO,, C4,60,f,302260,right arm snaps back into original position
+7250,725060,MO,, C4,60,f,303756,head snaps back into original position
+7297,729760m,MO,, C5,60m,F,356189,child comments "I want to do it with the blue one" and grabs blue robot; reset robots limbs to original position
+7297,729760m,MO,, C4,60m,F,251715,child comments "Im going to do it a little bit differently"
+7297,729760m,MO,, C4,60m,F,264078,child unintentionally creates down dog pose; rather than MJ4 pose
+7297,729760,MO,, C3,60,F,156236,when child moved right arm forward; left arm snapped back into place
+7297,729760,MO,, C3,60,F,169037,robot reset
+7309,730960,MO,, CB,60,M,36040,child is holding robot when baseline video begins
+7309,730960,MO,, CB,60,M,41378,child tries to push left arm down
+7309,730960,MO,, CB,60,M,52190,child tries to pull arm out
+7309,730960,MO,, CB,60,M,52190,child tries to pull head up
+7309,730960,MO,, C5,60,M,529849,head snaps into original position while child is playing with robot on floor
+7309,730960,MO,, C5,60,M,530302,child simultaneously snaps both legs back into original positions
+7309,730960,MO,, C5,60,M,550405,left leg snaps back into original position
+7309,730960,MO,, C5,60,M,559024,child holds both arms in front positions
+7309,730960,MO,, C4,60,M,336735,child simultaneously snaps both legs back into original positions
+7309,730960,MO,, C4,60,M,348469,child comments "I want to turn him into a rectangle"
+7309,730960,MO,, C4,60,M,372989,child puts robot behind his back imitating experimenter
+7309,730960,MO,, C4,60,M,372989,child comments "are you ready for mine?" indicating that he will now show the experimenter a new pose
+7309,730960,MO,, C4,60,M,393031,child puts robot behind his back imitating experimenter; commenting "just one more. are you ready for mine?"
+7309,730960,MO,, C4,60,M,406856,child puts the robot in his lap; obscuring it from the camera
+7319,731960,MO,, CB,60,f,5916,when baseline video begins child is already holding robot
+7319,731960,MO,, C4,60,F,178345,child moves head forward causing left arm to snap back into original position
+7319,731960,MO,, C4,60,F,186401,child moves head forward causing left arm to snap back into original position
+7319,731960,MO,, C4,60,F,191957,child moves head forward causing left arm to snap back into original position
+7319,731960,MO,, C4,60,F,198525,child moves head forward causing left arm to snap back into original position
+7319,731960,MO,, C4,60,F,208784,left arm snaps back into original position
+7319,731960m,MO,, C3,60m,F,130095,video cuts out partly as child is returning parts to original places due to camera issues
+7417,741760,MO,, CB,60,f,62288,child pulls arms out
+7417,741760,MO,, CB,60,f,62288,child pulls legs down
+7417,741760,MO,, CB,60,f,66674,child pulls head up
+7429,742942,MO,, C3,42,M,189543,child comments "this one doesnt do it"
+7429,742942,MO,, C3,42,M,204156,child comments "it cant do it"
+7429,742942,MO,, C3,42,M,209796,child switches to orange robot
+7456,745660,MO,, CB,60,f,87880,child is outside of the camera frame
+7456,745660m,MO,, C4,60m,F,290624,robot reset
+7456,745660,MO,, C3,60,F,203083,robot reset
+7483,748360,MO,, CB,60,m,69631,child does not engage with robot; continually kicking it back to experimenter
+7629,762960,MO,, CB,60,m,91833,child spins head around
+7630,763036,MO,, CB,36,m,72862,child spins head; arms and legs around
+7630,763036,MO,, C5,36,M,518011,robot reset
+7630,763036,MO,, C2,36,M,250656,robot reset
+7630,763035,MO,, C2,35,M,252919,robot reset
+7643,764342,OB,, CB,42,F,0,child is already holding robot when video begins for baseline
+7643,764342,OB,, CB,42,F,90883,child tries to move right leg to the left
+7643,764342,OB,, CB,42,F,95684,child tries to move right leg to the left 
+7643,764342,OB,, CB,42,F,100202,child tries to move right leg to the left 
+7643,764342,MO,, C3,42,f,175546,robot reset
+7644,764442,OB,, CB,42,m,76627,movements 4; 5; 6; 7 child tries to move arm downward into a joint that doesn't exist 
+7644,764442,OB,, CB,42,m,103614,movement 8 child moves right leg back to original position after it was out to the side; a result of his having pushed the robot against the floor 
+7644,764442,OB,, splits,42,M,0,Child does not name object nor does experimenter ask child to name object
+7649,764936,MO,, CB,36,m,234627,child pulls arm out and leg down
+7649,764936,MO,, C5,36,M,722306,left and right legs go to sides while child plays with robot against ground
+7649,764936,MO,, C3,36,m,519651,tries to move both arms at once
+7649,764936,MO,, C3,36,m,537384,
+7672,767236,TS,, C5,36,m,527054,child not paying attention by the end of the demonstration
+7672,767236,TS,, C5,36,m,575694,experimenter resets the robot
+7672,767236,TS,, C4,36,m,447179,experimenter resets the robot
+7672,767236,TS,, C3,36,m,351797,child not paying attention to demo during manipulation check
+7690,769036,MO,, CB,36,m,47715,robot is out of view of the camera
+7690,769036,MO,, C5,36,M,556322,robot reset
+7690,769036,TS,, C4,36,m,335399,again camera frame not including child during demo
+7690,769036,TS,, C4,36,m,384777,camera out of frame for first movement of the head back
+7690,769036,TS,, C4,36,m,403891,camera out of frame but heard a snap - child then reputs left leg front
+7690,769036,TS,, C4,36,m,412074,robot reset
+7690,769036,TS,, C3,36,m,250146,camera frame not including child's face in the demo; but child seems responsive 
+7690,769036,TS,, C2,36,m,230665,child produces down dog in wave pose (without seeing down dog demonstration!)
+7728,772836,MO,, CB,36,m,89284,child tries to move arm down
+7728,772836,MO,, C5,36,M,540350,head snaps back into original position due to leg
+7728,772836,LT, JRH & SR, C4,36,m,0,
+7737,773736,MO,, CB,36,f,69836,child played with robot but did not move arms; legs or head
+7737,773736,MO,, C5,36,F,445276,robot reset
+7737,773736m,MO,, C4,36m,F,351451,robot reset
+7740,774036,MO,, CB,36,m,111996,both arms snap back into original position
+7760,776036,MO,, C4,36,M,434882,head snaps back into original position
+7768,776836,MO,, C5,36,M,601792,child tried to move right leg into back position; knocking the left leg back into the original position
+7768,776836,MO,, C5,36,M,648958,child wants the same robot as experimenter
+7768,776836,MO,, C4,36,M,407047,child puts down robot and scoots away
+7797,779736,MO,, CB,36,m,67286,child tries to move arms down
+7797,779736m,MO,, C5,36m,M,667752,child pushes head back into original position causing right arm to snap back into original position
+7797,779736m,MO,, C5,36m,M,692280,child knocks left leg back into original position when pulling right leg back
+7797,779736m,MO,, C4,36m,M,533975,child tries to move head back to original position but the arms are in the way
+7797,779736m,MO,, C4,36m,M,538562,child pushes head through arms back into original position; causing arms to snap back into original positions
+7797,779736m,MO,, C4,36m,M,542497,child hands robot back to experimenter
+7797,779736m,MO,, C3,36m,M,431280,floor causes right leg to move to front position
+7797,779736m,MO,, C3,36m,M,441131,child moves head back to original position causing both arms to snap back into original position
+7797,779736m,MO,, C2,36m,M,280404,child asked "does this go back?" referring to the head
+7797,779736m,MO,, C2,36m,M,307565,simultaneously tries to pull both arms forward from up position
+7818,781836,MO,, CB,36,f,28377,child pulls arms out
+7818,781836m,MO,, C5,36m,F,580490,table pushes both legs back into original positions
+7818,781836m,MO,, C4,36m,F,428986,child produces backwards pose that looks similar to pose
+7818,781836m,MO,, C3,36m,F,269753,child comments "I cant do this" referring to moving the left leg back
+7818,781836m,MO,, C3,36m,F,286057,child moved head back causing right leg to snap back into original position
+7818,781836m,MO,, C2,36m,F,191533,robot reset
+7980,79805yo,SM, OB, CB,5yo,M,72794,when child puts toy table the left leg snaps outward and this happens multiple times
+8000,800036,MO,, C3,36,m,432480,child plays with robot without moving any limbs
+8000,800060,SM, OB, C3,60,M,307122,child moves head back and forth as it moves robot along the table
+8009,800936,MO,, C2,36,M,244560,performs mini-poses; possible manipulation check?
+8050,805060,SM, KP, C4,60,F,301172,when child put head back into original position the right arm snapped back into original position
+8050,805060,SM, KP, CB,60,F,82620,child is very uninterested and doesn't touch robot so experimenter takes it back
+8092,809236,HG, SR, C5,36,f,426054,when head is brought forward; arms snap back into original position
+8092,809236,HG, SR, C5,36,f,427958,when left arm is brought forward; head snaps back into original position
+8092,809236,HG, SR, C2,36,f,189482,says robot looks like it is kicking a ball
+8093,809336,HG, OB, C4,36,f,435098,left leg goes back to original position unintentionally
+8093,809336,HG, OB, CB,36,f,87720,no movements made during baseline
+8093,809336,HG, OB, C3,36,f,343536,moves both legs out at same time
+8097,809736,SS, OB, CB,36,f,37128,does not move legs out of original position with hands
+8097,809736,SS, OB, CB,36,f,68633,keeps smushing robot on ground and legs go out upon touching ground
+8097,809736,SS, OB, C2,36,f,176188,child resets robot
+8107,810736,LT, OB & SR, CB,36,f,95153,child does not want to play with robot throws it away
+8155,815536,HG, OB, CB,36,m,38624,moves both legs at the same time
+8155,815536,HG, OB, C3,36,m,494842,child is distracted and just wants to play with the toy
+8155,815536,HG, OB, C3,36,m,579629,Experimenter ends robot task
+8155,815536,HG, OB, C2,36,m,364004,child flings the robot around; moving limbs
+8199,819936,HG, OB, C4,36,f,467745,child is unengaged and uninterested during demo and test
+8199,819936,HG, OB, C4,36,f,511088,Child refuses to touch and move robot
+8199,819936,HG, OB, CB,36,f,15674,child does not make any complete movements
+8199,819936,HG, OB, C3,36,f,335360,child does not want to play with red robot and starts moving parts on blue robot
+8199,819936,HG, OB, C3,36,f,409598,experimenter gives up on this pose
+8199,819936,HG, OB, C2,36,f,226882,right leg moves back into original position but not through purposeful movement of the child
+8217,821736,HG, OB, C5,36,f,700060,child takes a bathroom break after demo
+8217,821736,HG, OB, C5,36,f,763470,head is moved back to original position when child presses it against the table
+8217,821736,HG, OB, C5,36,f,772446,head is then moved back when child presses robot on table; not a purposeful move
+8217,821736,HG, OB, C4,36,f,369512,when child moves the head up into original position; right arm snaps back into original position
+8217,821736,HG, OB, CB,36,f,28016,child makes no moves on the robot
+8217,821736,HG, OB, C3,36,f,271830,head and arm moved back to original position after child sets robot on desk
+8217,821736,HG, OB, C2,36,f,214642,child resets robot to original position after achieving correct pose
+8219,821936,HG, OB, C4,36,f,510000,manip check requires a lot of guidence from experimenter
+8219,821960,SM, OB, CB,60,F,68272,child did not make any complete movements
+8219,821936,HG, OB, C3,36,f,338606,both legs moved outwards simultaneously
+8222,822260,SM, KP, C5,60,F,428604,when child lifted robot up and put it on table the head snapped back to original position
+8222,822260,SM, KP, C4,60,F,319872,when child is moving around legs the head snaps back to original position
+8222,822236,HG, OB, CB,36,f,124168,child moves and twists robot around extensively; but no full movements are made
+8222,822260,SM, KP, CB,60,F,60656,child did not make any complete movements
+8222,822236,HG, OB, C2,36,f,0,thought it looks like a "birdie"
+8222,822236,HG, OB, C2,36,f,237184,child twists the robot head around so it looks like she turns it back but she actually puts it forward
+8228,822836,SS, OB, CB,36,f,71298,child did not move any pieces during baseline
+8229,822936,SS, OB, CB,36,f,70822,child did not move any pieces during baseline
+8229,822936,SS, OB, C4,36,f,389776,moved both legs to the side at the same time
+8229,822936,SS, OB, C4,36,f,402186,switched robots
+8231,823136,SS, OB, CB,36,f,65926,child did not move any pieces during baseline
+8231,823136,SS, OB, C5,36,f,357476,child grabs robot from experimenter during demo
+8231,823136,SS, OB, C5,36,f,370192,child does not want to show the pose so there are no movements
+8231,823136,SS, OB, C3,36,f,212738,child grabs robot and starts playing with it during demo
+8266,826636,LT, KP & KC, CB,36,f,0,
+8266,826636,LT, KP & KC,C5,36,f,517446,gets another turn
+8277,827736,HG, OB, C2,36,f,166702,cannot see experimenter during demo period so just had to do my best
+8352,835236,MO,, CB,36,m,81600,child blocking robot from camera view
+8352,835236,MO,, C5,36,M,582658,robot reset
+8352,835236,MO,, C4,36,M,465225,robot reset
+8352,835236,MO,, C3,36,M,342122,robot reset
+8352,835236,MO,, C3,36,M,355669,child switches to blue robot
+8355,835560,MO,, CB,60,f,18054,child tries to move arms down
+8368,836836,HG, OB, C4,36,m,327760,tries to move left leg back too and unintentially moves right leg back into original position
+8368,836836,HG, OB, C4,36,m,345304,moving right leg back; left leg had unintentionally snapped back into original position
+8368,836836,HG, OB, CB,36,m,46512,child does not make any complete movements
+8368,836836,HG, OB, C3,36,m,232254,is able to get the right leg back with assistance from experimenter
+8374,837436,LT, OB & MS, CB,36,m,29920,cannot see when child gets handed toy
+8378,837836,MO,, CB,36,f,68714,child spins robots head
+8378,837836,MO,, C5,36,f,481746,left leg snaps back into original position
+8378,837836,MO,, C5,36,f,506640,robot reset
+8378,837836,MO,, C4,36,F,384761,robot reset
+8378,837836,MO,, C3,36,f,271320,robot reset
+8378,837836,MO,, C3,36,f,289176,robot reset
+8389,838936,MO,, CB,36,m,124576,left and right arms snaps back into original positions
+8389,838936,MO,, C5,36,m,676878,robot reset
+8389,838936,MO,, C4,36,m,531408,robot reset
+8389,838936,MO,, C2,36,m,306481,robot reset
+8389,838936,MO,, C2,36,m,335920,arm snaps back into original position
+8389,838936,MO,, C2,36,m,335920,child puts robot behind back imitating experimenter
+8390,839036,HG, OB, CB,36,m,30532,child asks is this a robot
+8390,839036,HG, OB, CB,36,m,72216,moves both legs back to original position at same time
+8409,840936,LT, OB & OM, CB,36,f,0,child made no movements with robot during baseline
+8409,840936,SM, OB, C2,36,f,255884,child does not make any complete movements on the robot 
+8419,841936,SS, OB, CB,36,f,110364,child did not move any pieces during baseline
+8419,841936,SS, OB, C5,36,f,670684,left leg becomes side but unable to see when she moved it and whether she intentionaly moved it
+8421,842136,HG, OB, C5,36,m,707744,child is given green robot rather than blue robot he has been using because he wants it
+8421,842136,HG, OB, C5,36,m,755718,child trades the green robot for the white robot and makes moves on that robot but does not achieve the pose on white robot either
+8421,842136,HG, OB, CB,36,m,185776,child attempts to move both legs forward but is unsuccessful
+8421,842136,HG, OB, C3,36,m,439008,said it looks like a cookie
+8421,842136,HG, OB, C2,36,m,358564,child gets the correct pose and then puts the second arm up
+8422,842236,HG, OB, C4,36,m,381208,moves both legs to the sides at the same time
+8422,842236,HG, OB, C4,36,m,414018,says it looks like an airplane
+8422,842236,HG, OB, C3,36,m,302396,says it looks like an airplane
+8428,842836,MC, OB, CB,36,f,0,
+8428,842836,LT, OB & JRH, C3,36,f,0,
+8429,842936,ne, OB, CB,36,m,73576,child did not move any pieces during baseline
+8429,842936,SS, OB, C5,36,m,497386,put both legs to original position at the same time 
+8431,843136,HG, KB, C4,36,f,459986,no movements made for MJ4 pose trial
+8431,843136,HG, KB, CB,36,f,108222,no movements made during Baseline period
+8433,843336,HG, OB, CB,36,m,101830,child does not make any complete movements
+8436,843636,HG, KB, CB,36,m,89726,no movements made by child in baseline period
+8437,843736,SS, OB, CB,36,f,50184,child does not move any pieces during baseline
+8437,843736,SS, OB, C3,36,f,259998,put both arms front at the same time
+8437,843736,SS, OB, C2,36,f,138482,experimenter showed head forward instead of head back during demo
+8460,846036,SM, OB, CB,36,m,73576,child does not make any complete movements
+8460,846036,SM, OB, C3,36,m,274142,child did not make any complete movements
+8460,846036,SM, OB, C2,36,m,210698,child does not make any complete movements
+8466,846636,HG, OB, C3,36,m,256802,right leg moves back into the original position without child purposefully moving it
+8481,848136,HG, OB, C5,36,f,571574,demo starts and then stops for a bit because child is very distracted
+8481,848136,HG, OB, CB,36,f,113424,No moves made by child during baseline period
+8489,848936,HG, OB, CB,36,f,90304,child does not make any complete movements
+8498,849836,SS, OB, CB,36,f,99858,child does not move any pieces during baseline
+8506,850636,SM, OB, C4,36,f,365636,when child moves head to front; the arms snap back to original position
+8506,850636,SM, OB, CB,36,f,89250,child did not make any complete movements; just turned head around
+8506,850636,SM, OB, C3,36,f,297330,when child moved head forward; the arms snapped back to original positions
+8506,850636,SM, OB, C2,36,f,225896,when child moved head to the front; the arms snapped back to the original position
+8517,851736,LT, KC, C5,36,f,634288,performs manipulation check but moves legs backwards not forwards every time
+8525,852536,SS, OB, CB,36,m,58650,child did not move any pieces during baseline
+8525,852536,SS, OB, C2,36,m,244886,child gets distracted during demo
+8541,854136,SS, OB, C3,36,m,290428,child wants to see another game
+8543,854336,SS, SR, CB,36,m,26044,moved both legs to the side at the same time
+8543,854336,SS, SR, C4,36,m,378930,child resets robot
+8544,854436,HG, JRH, C4,36,f,491844,child resets robot after completing pose and completes the pose a second time
+8544,854436,HG, JRH, CB,36,f,60044,no movements by child
+8551,855136,LT, KP & OB, CB,36,f,0,
+8551,855136,LT, KP & OB, C3,36,f,403584,child loses interest after first demo
+8551,855136,LT, KP & OB,C2,36,f,340170,out of frame
+8556,855636,HG, KB, C2,36,f,316234,Exp takes robot away and gives it back for a second try
+8566,856636,HG, KB, C4,36,m,440844,child makes no complete movements
+8566,856636,HG, KB, CB,36,m,72726,no moves made by the child in baseline period
+8566,856636,HG, KB, C3,36,m,304028,no movements made by child originally and then experimenter represents it to him
+8566,856636,HG, KB, C3,36,m,325278,left leg had moved to left not as a purposeful movement then child moves it back to original orientation
+8566,856636,HG, KB, C2,36,m,247044,child makes no moves
+8571,857136,LT, KP & MS,CB,36,m,0,
+8571,857136,LT, KP & MS,C5,36,m,588914,readjustment; accidentally knocked head back up
+8571,857136,LT, KP & MS,C5,36,m,611561,hard to see
+8571,857136,LT, KP & MS,C5,36,m,619378,last two movements happen simultaneously
+8571,857136,LT, KP & MS,C4,36,m,500707,unclear; out of frame
+8571,857136,LT, KP & MS, C3,36,m,371552,unclear whether this is a full movement
+8571,857136,LT, KP & MS, C2,36,m,294440,child plays with green robot for a bit
+8580,858036,HG, OB, C4,36,m,407456,child eating and distracted during demo
+8580,858036,HG, OB, CB,36,m,51306,child makes no complete moves
+8580,858036,HG, OB, C3,36,m,322456,No complete movements
+8590,859036,LT, OB & ML, CB,36,f,162703,child moving around cannot see if she is making movements
+8605,860536,HG, OB, C4,36,m,483752,child is originally offered red robot but only accepts white robot
+8605,860536,HG, OB, C4,36,m,512380,child makes no movements that can be seen since the camera person was not focusing well
+8605,860536,HG, OB, CB,36,f,58310,Child makes no movements during the baseline period
+8605,860536,HG, OB, C2,36,m,279718,limbs were reset unintentionally by moving robot around
+8619,861936,HG, OB, C4,36,f,391510,no moves made by child independently. experimenter gives child different white robot and helps her through making movements
+8619,861936,HG, OB, CB,36,f,57664,No movements made during baseline period
+8652,865236,HG, OB, C3,36,m,271218,experimenter gives up on this trial child never even touches robot
+8652,865236,HG, OB, CB,36,m,1020,no moves made independently by the child
+8685,868536,HG, OB, CB,36,f,79186,child makes no full movements on the robot
+8685,868536,HG, OB, C3,36,f,282166,needs assistance from experimenter to get the leg back
+8685,868536,HG, OB, C3,36,f,292230,when moving the head forward both arms snap back to original position
+8702,870236,SM, KP, C5,36,m,539342,when child moved right arm to front the head snapped back to original position
+8702,870236,SM, KP, C5,36,m,540600,when child moved head back the right arm snapped back to original position
+8702,870236,SM, KP, C5,36,m,542572,when child moved right arm to front the head snapped back to original position
+8702,870236,SM, KP, C5,36,m,544476,when child moved head back the right arm snapped back to original position
+8702,870236,SM, KP, C4,36,m,416262,whe moving left arm in front the left leg snapped back to original position
+8702,870236,SM, KP, C4,36,m,427210,when child put robot on ground the left arm snapped back to original position
+8702,870236,SM, KP, CB,36,m,66504,child did not make any complete movements
+8709,870936,LT, KP & HG, C3,36,m,393856,child switches to yellow robot
+8709,870936,LT, KP & HG, CB,36,m,0,
+8712,871236,HG, OB, CB,36,f,135524,no movements made
+8713,871336,LT, OB & JRH, C4,36,m,428400,when child moves leg head snaps up back to normal
+8718,871836,LT, KP & AM, CB,36,f,188761,for training...did one hand movement then srefused to participate 
+8718,871836,LT, KP & AM, C4,36,f,386240,gets a second chance experimenter resets robot
+8718,871836,LT, KP & AM, C3,36,f,287028,as she moved it the right arm fell back to the side
+8720,872036,SM, OB, CB,36,f,48042,child did not make any movements
+8722,872236,LT, KP & SST,C5,36,f,527598,reset; asked to do again
+8722,872236,LT, KP & SST, C4,36,f,413304,reset asked to show again
+8722,872236,LT, KP & SST, C3,36,f,302804,reset child asked to show again
+8722,872236,LT, KP & SST, C2,36,f,226185,reset child asked to show again
+8736,873636,LT, KC, CB,36,m,0,
+8742,874236,LT, KP & EP, C2,36,m,281656,child won't use green robot demands for red
+8742,874236,LT, KP & EP, C2,36,m,478142,falls out of place child readjusts
+8744,874436,LT, KC, CB,36,f,0,
+8744,874436,LT, KC, C5,36,f,574498,other child is playing with robot and blocking
+8744,874436,LT, KC,  C4,36,f,457805,camera angles hard
+8744,874436,LT, KC, C3,36,f,339184,camera angles hard to see
+8744,874436,LT, KC, C2,36,f,212898,cannot see any of the first part because child blocking the screen
+8744,874436,LT, KC, C2,36,f,231512,in visit notes says the wave pose is done correctly
+8748,874836,LT, SW, CB,36,f,0,
+8748,874836,LT, SW, C3,36,f,291754,moves left leg back off screen
+8754,875436,SM, OB, CB,36,m,78438,child made no complete movements on robot
+8757,875736,SM, OB, CB,36,m,71876,child did not make any complete movements
+8759,875936,SM, KP, C5,36,m,564944,when child pressed robot on table both arms moved up
+8759,875936,SM, KP, C5,36,m,569942,when child pressed robot to table the legs returned to original position
+8759,875936,SM, KP, C2,36,m,267172,when child pressed robot to table the right arm moved up
+8760,876036,SM, OB, C3,36,f,290836,child had moved head back to original position a little bit prior on the ground off camera
+8763,876336,LT, OB &  JRH, CB,36,m,0,
+8763,876336,LT, OB & JRH, C4,36,m,0,couldn't finish demo child disengaged
+8763,876336,LT, OB & JRH, C3,36,m,0,
+8764,876436,LT, KP & SM,C5,36,m,535432,leg falls so readjusts
+8764,876436,LT, KP & SM, C4,36,m,423368,as left leg moves front head falls back to normal
+8764,876436,LT, KP & SM, C4,36,m,443507,asked to show again
+8764,876436,LT, KP & SM, C2,36,m,249118,asked to recreate
+8766,876636,LT, OB & AM, CB,36,f,0,
+8766,876636,LT, OB & AM, C3,36,f,366656,right leg also back to normal but because it hit the ground
+8767,876736,LT, KC & CP, CB,36,m,0,
+8814,881436,LT, KP & MS, C4,36,f,0,child made no complete movements got tired of robots
+8819,881936,LT, OB & HG, C5,36,m,600761,child keeps moving the legs but doesn't complete any full movements
+8819,881936,LT, OB & HG, C5,36,m,608190,seems to be tired of robots
+8819,881936,LT, OB & HG, C4,36,m,470322,hard to see
+8834,883436,LT, KP & MC, C4,36,f,477270,
+8866,886636,LT, KC, CB,36,m,0,
+8866,886636,LT, KC, C4,36,m,453679,child resets out of camera
+8866,886636,LT, KC, C2,36,m,222904,child resets behind back
+8866,886636,LT, KC, C2,36,m,252910,child resets behind back
+8890,889036,LT, SW, CB,36,m,0,
+8890,889036,LT, SW, C2,36,m,197728,child resets behind back
+8908,890836,LT, KC, CB,36,m,0,
+8908,890836,LT, KC, C4,36,m,454206,some movements hard to see
+8908,890836,LT, KC, C2,36,m,206919,out of the frame cannot see movements
+8969,896936,LT, KP & CT, C3,36,m,402832,hard to see
+8973,897336,HG, OB, C4,36,f,469642,difficult to be tell if complete moves are being made because child throw robot away over and over again
+8973,897336,HG, OB, C3,36,f,341666,no complete movements made during the tree pose trial
+8981,898136,LT, OB & HG, CB,36,f,0,
+8987,898736,LT, SW, CB,36,m,0,
+8998,899836,LT, JRH, CB,36,m,0,
+8998,899836,LT, JRH, C3,36,m,0,
+9034,903436,LT, KC, CB,36,f,0,
+9034,903436,LT, KC, C4,36,f,457079,child resets behind back
+9034,903436,LT, KC, C3,36,f,361768,child resets behind back
+9034,903436,LT, KC, C2,36,f,269428,child resets behind back
+9046,904636,LT, KP & TG, C5,36,f,482361,child has trouble with legs doesn't push it into joint
+9046,904636,LT, KP & TG, C5,36,f,510952,reset halfway through
+9046,904636,LT, KP & TG, C4,36,f,372062,leg fell down child moves it back seems to have difficulty with leg
+9046,904636,LT, KP & TG, C4,36,f,393550,reset asked to show again
+9046,904636,LT, KP & TG, C3,36,f,313062,asked to show again but does not move robot
+9046,904636,LT, KP & TG, C2,36,f,211761,reset asked to show again
+9056,905636,LT, JRH, CB,36,m,0,notes say that the child didnt do any behaviors
+9056,905636,LT, JRH, CB,36,m,80857,cannot see movements done off screen
+9056,905636,LT, JRH, C3,36,m,251357,experimenter resets and gives another turn
+9069,906936,LT, KC & AA, CB,36,m,292826,child does not like robots
+9080,908036,LT, KC & CP, C5,36,f,553602,did not get to finish all three demos because child did not want to play anymore
+9095,909536,LT, JRH & KC, CB,36,m,0,child made no movements with the robot during baseline period
+9095,909536,LT, KRH & CK, C5,36,f,487063,chidl not showing pose on white robot so experimenter switches to green
+9095,909536,LT, JRH & CK, C4,36,m,0,
+9095,909536,LT, JRH & CK, C3,36,m,0,do not think whole pose was filmed but for duration that was filmed the child made no movements
+9095,909536,LT, JRH & CK, C2,36,f,0,
+9128,912836,LT, SW, CB,36,m,0,
+9128,912836,LT, SW, C4,36,m,518092,experimenter moves this
+9128,912836,LT, SW, C4,36,m,524654,experimenter moves this
+9128,912836,LT, SW, C3,36,f,426230,child was tired and made no movements
+9162,916236,LT, SW & WZ, CB,36,f,0,
+9162,916236,LT, SW & WZ, C2,36,f,188357,child resets behind back
+9163,916336,LT, KC & SW, CB,36,m,0,
+9169,916936,LT, KC, C3,36,f,357024,did not finish demo and did not do any other poses because chidl distracted
